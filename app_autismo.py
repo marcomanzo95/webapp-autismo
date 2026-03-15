@@ -153,16 +153,16 @@ def invia_risultati():
         dati = request.form.to_dict()
         
         # Estrai i dati demografici
-        nome = dati.get('nome', 'Non specificato')
-        cognome = dati.get('cognome', 'Non specificato')
+        codice_paziente = dati.get('codice_paziente', '')
+        if not codice_paziente:
+            return jsonify({
+                'success': False,
+                'message': 'Codice paziente mancante'
+            }), 400
         data_nascita = dati.get('data_nascita', 'Non specificata')
         genere = dati.get('genere', 'Non specificato')
-        telefono = dati.get('telefono', 'Non specificato')
-        indirizzo = dati.get('indirizzo', 'Non specificato')
         istruzione = dati.get('istruzione', 'Non specificata')
         
-        # Genera un codice paziente anonimo
-        codice_paziente = secrets.token_hex(8)
         
         # Calcola i risultati dei test
         risultati = {}
