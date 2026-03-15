@@ -50,7 +50,28 @@ QUESTIONARI = {
     'tas20': {'nome': 'TAS-20', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y1': {'nome': 'STAI-Y-1', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y2': {'nome': 'STAI-Y-2', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
-    'gsrs': {'nome': 'GSRS', 'item_count': 15, 'domande': ["Domanda 1", "Domanda 2"]},
+    'gsrs': {
+        'nome': 'GSRS (Gastrointestinal Symptom Rating Scale)',
+        'item_count': 15,
+        'domande': [
+            "Hai avuto DOLORE O DISAGIO nella parte superiore dell'addome o alla bocca dello stomaco nell'ultima settimana?",
+            "Hai avuto BRUCIORE DI STOMACO nell'ultima settimana?",
+            "Hai avuto REFLUSSO ACIDO nell'ultima settimana?",
+            "Hai avuto CRAMPI DA FAME allo stomaco nell'ultima settimana?",
+            "Hai avuto NAUSEA nell'ultima settimana?",
+            "Hai avuto RUMORI allo stomaco nell'ultima settimana?",
+            "Hai avuto una SENSAZIONE DI GONFIORE allo stomaco nell'ultima settimana?",
+            "Hai avuto ERUTTAZIONI nell'ultima settimana?",
+            "Hai avuto GAS o FLATULENZA nell'ultima settimana?",
+            "Hai avuto STITICHEZZA nell'ultima settimana?",
+            "Hai avuto DIARREA nell'ultima settimana?",
+            "Hai avuto FECI MOLLI nell'ultima settimana?",
+            "Hai avuto FECI DURE nell'ultima settimana?",
+            "Hai avuto un BISOGNO URGENTE di andare in bagno per un movimento intestinale nell'ultima settimana?",
+            "Quando sei andato in bagno nell'ultima settimana, hai avuto la SENSAZIONE DI NON SVUOTARE COMPLETAMENTE l'intestino?"
+        ],
+        'scale': ['Nessun disagio', 'Disagio minimo', 'Disagio lieve', 'Disagio moderato', 'Disagio medio-grave', 'Disagio grave', 'Disagio molto grave']
+    },
     'asi': {'nome': 'ASI', 'item_count': 29, 'domande': ["Domanda 1", "Domanda 2"]},
     'ocir': {'nome': 'OCI-R', 'item_count': 18, 'domande': ["Domanda 1", "Domanda 2"]},
     'asq': {'nome': 'ASQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]}
