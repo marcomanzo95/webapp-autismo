@@ -44,71 +44,128 @@ EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com'
 QUESTIONARI = {
     'raads_r': {'nome': 'RAADS-R', 'item_count': 80, 'domande': ["Domanda 1", "Domanda 2"]},
     # Dizionario per il test AQ (Autism‑Spectrum Quotient)
-'aq': {
-    'nome': 'AQ (Autism‑Spectrum Quotient)',
-    'descrizione': 'Questionario autosomministrato che misura i tratti autistici negli adulti',
-    'item_count': 50,
-    # Ogni opzione ha un valore (1–4) coerente con lo scoring: 1=totale d’accordo, 4=totale in disaccordo
-    'scale_options': [
-        {'value': 1, 'label': 'Totalmente d’accordo'},
-        {'value': 2, 'label': 'Parzialmente d’accordo'},
-        {'value': 3, 'label': 'Parzialmente in disaccordo'},
-        {'value': 4, 'label': 'Totalmente in disaccordo'}
-    ],
-    'domande': [
-        'Preferisco fare le cose in compagnia anziché da solo.',
-        'Preferisco fare le cose sempre allo stesso modo.',
-        'Se tento di immaginare qualcosa, trovo molto facile creare un’immagine nella mia mente.',
-        'Mi capita spesso di essere tanto assorbito da qualcosa da perdere di vista le altre cose.',
-        'Spesso avverto suoni deboli di cui gli altri non si accorgono.',
-        'Abitualmente presto attenzione ai numeri delle targhe delle auto o a particolari del genere.',
-        'Frequentemente le altre persone mi dicono che quello che ho detto è scortese, mentre invece io penso che sia corretto.',
-        'Quando leggo una storia, posso facilmente immaginare l’aspetto dei personaggi.',
-        'Sono affascinato dalle date.',
-        'Nelle occasioni sociali riesco facilmente a seguire le conversazioni di diverse persone.',
-        'Nelle situazioni sociali mi sento a mio agio.',
-        'Tendo a notare dettagli che gli altri non notano.',
-        'Preferisco recarmi in biblioteca piuttosto che ad un party.',
-        'Riesco facilmente ad inventare delle storie.',
-        'Trovo che mi attirano molto più le persone che le cose.',
-        'Tendo ad avere interessi molto forti, e mi disturba fortemente se non posso perseguirli.',
-        'Mi piace partecipare alla conversazione.',
-        'Quando parlo io, per gli altri non è sempre facile inserirsi nella conversazione.',
-        'Sono affascinato dai numeri.',
-        'Quando sto leggendo una storia, mi riesce difficile capire le intenzioni dei personaggi.',
-        'Non amo particolarmente leggere narrativa.',
-        'Mi è difficile farmi dei nuovi amici.',
-        'Noto continuamente schemi nelle cose.',
-        'Vado più volentieri a teatro che in un museo.',
-        'Non mi disturba se viene alterata la mia routine giornaliera.',
-        'Mi capita frequentemente di non saper come continuare una conversazione.',
-        'Quando qualcuno sta parlando con me, trovo facile leggere tra le righe.',
-        'Di solito io mi concentro più sull’immagine intera che sui piccoli dettagli.',
-        'Non sono molto bravo a ricordarmi i numeri telefonici.',
-        'Di solito non noto i piccoli cambiamenti in una situazione o nell’aspetto di una persona.',
-        'So distinguere se qualcuno che mi ascolta si sta annoiando.',
-        'Riesco facilmente a fare più di una cosa allo stesso tempo.',
-        'Quando sono al telefono non sono sicuro di quando tocca a me parlare.',
-        'Mi piace fare le cose spontaneamente.',
-        'Spesso sono l’ultimo ad afferrare il senso di una battuta.',
-        'Riesco facilmente a intuire quello che una persona pensa o prova solo guardandola in faccia.',
-        'Se mi interrompono mentre sono impegnato a fare qualcosa, riesco a riprendere molto rapidamente.',
-        'Riesco bene nella conversazione sociale.',
-        'Spesso la gente mi dice che io insisto sempre sullo stesso argomento.',
-        'Quando ero piccolo mi piaceva giocare con altri bambini a “far finta di…”.',
-        'Mi piace raccogliere informazioni su categorie di cose (ad esempio tipi di auto, uccelli, treni, piante).',
-        'Mi è difficile immaginare come sarebbe la mia vita se io fossi un’altra persona.',
-        'Mi piace pianificare attentamente tutte le attività alle quali io partecipo.',
-        'Amo le occasioni sociali.',
-        'Mi è difficile comprendere le intenzioni della gente.',
-        'Le situazioni nuove mi rendono ansioso.',
-        'Mi piace incontrare nuove persone.',
-        'Sono un buon diplomatico.',
-        'Non sono molto bravo a ricordarmi la data di nascita delle persone.',
-        'Per me è molto facile giocare coi bambini a “far finta di…”.'
-    ]
-},
-    'eq': {'nome': 'EQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]},
+    'aq': {
+        'nome': 'AQ (Autism‑Spectrum Quotient)',
+        'descrizione': 'Questionario autosomministrato che misura i tratti autistici negli adulti',
+        'item_count': 50,
+        # Ogni opzione ha un valore (1–4) coerente con lo scoring: 1=totale d’accordo, 4=totale in disaccordo
+        'scale_options': [
+            {'value': 1, 'label': 'Totalmente d’accordo'},
+            {'value': 2, 'label': 'Parzialmente d’accordo'},
+            {'value': 3, 'label': 'Parzialmente in disaccordo'},
+            {'value': 4, 'label': 'Totalmente in disaccordo'}
+        ],
+        'domande': [
+            'Preferisco fare le cose in compagnia anziché da solo.',
+            'Preferisco fare le cose sempre allo stesso modo.',
+            'Se tento di immaginare qualcosa, trovo molto facile creare un’immagine nella mia mente.',
+            'Mi capita spesso di essere tanto assorbito da qualcosa da perdere di vista le altre cose.',
+            'Spesso avverto suoni deboli di cui gli altri non si accorgono.',
+            'Abitualmente presto attenzione ai numeri delle targhe delle auto o a particolari del genere.',
+            'Frequentemente le altre persone mi dicono che quello che ho detto è scortese, mentre invece io penso che sia corretto.',
+            'Quando leggo una storia, posso facilmente immaginare l’aspetto dei personaggi.',
+            'Sono affascinato dalle date.',
+            'Nelle occasioni sociali riesco facilmente a seguire le conversazioni di diverse persone.',
+            'Nelle situazioni sociali mi sento a mio agio.',
+            'Tendo a notare dettagli che gli altri non notano.',
+            'Preferisco recarmi in biblioteca piuttosto che ad un party.',
+            'Riesco facilmente ad inventare delle storie.',
+            'Trovo che mi attirano molto più le persone che le cose.',
+            'Tendo ad avere interessi molto forti, e mi disturba fortemente se non posso perseguirli.',
+            'Mi piace partecipare alla conversazione.',
+            'Quando parlo io, per gli altri non è sempre facile inserirsi nella conversazione.',
+            'Sono affascinato dai numeri.',
+            'Quando sto leggendo una storia, mi riesce difficile capire le intenzioni dei personaggi.',
+            'Non amo particolarmente leggere narrativa.',
+            'Mi è difficile farmi dei nuovi amici.',
+            'Noto continuamente schemi nelle cose.',
+            'Vado più volentieri a teatro che in un museo.',
+            'Non mi disturba se viene alterata la mia routine giornaliera.',
+            'Mi capita frequentemente di non saper come continuare una conversazione.',
+            'Quando qualcuno sta parlando con me, trovo facile leggere tra le righe.',
+            'Di solito io mi concentro più sull’immagine intera che sui piccoli dettagli.',
+            'Non sono molto bravo a ricordarmi i numeri telefonici.',
+            'Di solito non noto i piccoli cambiamenti in una situazione o nell’aspetto di una persona.',
+            'So distinguere se qualcuno che mi ascolta si sta annoiando.',
+            'Riesco facilmente a fare più di una cosa allo stesso tempo.',
+            'Quando sono al telefono non sono sicuro di quando tocca a me parlare.',
+            'Mi piace fare le cose spontaneamente.',
+            'Spesso sono l’ultimo ad afferrare il senso di una battuta.',
+            'Riesco facilmente a intuire quello che una persona pensa o prova solo guardandola in faccia.',
+            'Se mi interrompono mentre sono impegnato a fare qualcosa, riesco a riprendere molto rapidamente.',
+            'Riesco bene nella conversazione sociale.',
+            'Spesso la gente mi dice che io insisto sempre sullo stesso argomento.',
+            'Quando ero piccolo mi piaceva giocare con altri bambini a “far finta di…”.',
+            'Mi piace raccogliere informazioni su categorie di cose (ad esempio tipi di auto, uccelli, treni, piante).',
+            'Mi è difficile immaginare come sarebbe la mia vita se io fossi un’altra persona.',
+            'Mi piace pianificare attentamente tutte le attività alle quali io partecipo.',
+            'Amo le occasioni sociali.',
+            'Mi è difficile comprendere le intenzioni della gente.',
+            'Le situazioni nuove mi rendono ansioso.',
+            'Mi piace incontrare nuove persone.',
+            'Sono un buon diplomatico.',
+            'Non sono molto bravo a ricordarmi la data di nascita delle persone.',
+            'Per me è molto facile giocare coi bambini a “far finta di…”.'
+        ]
+    },
+    'eq': {
+        'nome': 'EQ (Empathy Quotient)',
+        'descrizione': 'Questionario autosomministrato per la valutazione dell’empatia negli adulti',
+        'istruzioni': 'A seguire sono riportate una lista di affermazioni. Leggi ciascuna affermazione molto attentamente e indica quanto fortemente sei in accordo o in disaccordo con esse, cerchiando la tua risposta. Non ci sono risposte giuste o sbagliate.',
+        'item_count': 40,
+    
+        'scale_options': [
+            {'value': 1, 'label': 'Assolutamente d’accordo'},
+            {'value': 2, 'label': 'Parzialmente d’accordo'},
+            {'value': 3, 'label': 'Parzialmente in disaccordo'},
+            {'value': 4, 'label': 'Assolutamente in disaccordo'}
+        ],
+    
+        'domande': [
+    
+            "Capisco con facilità se qualcuno vuole partecipare ad una conversazione.",
+            "Trovo difficile spiegare agli altri concetti che io comprendo facilmente, quando loro non capiscono alla prima spiegazione.",
+            "Prendermi cura degli altri è qualcosa che mi fa veramente piacere.",
+            "Trovo difficile capire come comportarmi in una situazione sociale.",
+            "Le persone spesso mi dicono che insisto troppo sul mio punto di vista in una discussione.",
+            "Non mi preoccupa più di tanto essere in ritardo ad un appuntamento con un amico.",
+            "Le amicizie e le relazioni sociali sono troppo difficili per me, così tendo a non occuparmene.",
+            "Spesso trovo difficile giudicare se qualcosa è sgarbato o cortese.",
+            "In una conversazione tendo a focalizzarmi sulle mie idee piuttosto che su cosa potrebbe stare pensando il mio interlocutore.",
+            "Quando ero bambino/a mi divertivo a sezionare i vermi per vedere cosa succedeva.",
+            "Riesco facilmente a capire se qualcuno dice una cosa ma ne intende un’altra.",
+            "Non capisco perché la gente si offende tanto per certe cose.",
+            "Riesco facilmente a mettermi nei panni degli altri.",
+            "Sono bravo/a a predire i sentimenti degli altri.",
+            "Mi accorgo subito se qualcuno in un gruppo è a disagio o imbarazzato.",
+            "Se ciò che dico offende qualcuno, penso che questo sia un suo problema, non mio.",
+            "Se qualcuno mi chiede un parere sul suo nuovo taglio di capelli, rispondo sinceramente anche se non mi piace.",
+            "Non riesco sempre a capire perché qualcuno possa essersi sentito offeso da un commento.",
+            "Vedere qualcuno piangere non mi turba più di tanto.",
+            "Sono molto diretto e questo viene spesso interpretato come scortesia, anche se non è mia intenzione.",
+            "Non ho la tendenza a sentirmi confuso nelle situazioni sociali.",
+            "Le persone mi dicono che sono bravo/a a comprendere cosa stanno provando o cosa stanno pensando.",
+            "Quando parlo con le persone tendo a discutere più delle loro esperienze che delle mie.",
+            "Mi turba vedere soffrire un animale.",
+            "Riesco a prendere le decisioni senza lasciarmi influenzare dalle opinioni degli altri.",
+            "Riesco facilmente a capire se il mio interlocutore è interessato o annoiato da ciò che dico.",
+            "Mi turbano le immagini di gente che soffre quando guardo le notizie in TV.",
+            "Gli amici spesso mi parlano dei loro problemi perché si sentono capiti.",
+            "Riesco a percepire se la mia presenza è indesiderata, anche se non mi viene detto espressamente.",
+            "Talvolta le persone mi dicono che ho esagerato nel prendere in giro.",
+            "La gente mi dice spesso che sono insensibile sebbene io non sempre ne capisca il perché.",
+            "Se vedo una persona nuova in un gruppo, penso che stia a lui fare uno sforzo per inserirsi.",
+            "Solitamente rimango emotivamente distaccato quando guardo un film.",
+            "Riesco ad entrare in sintonia con ciò che qualcun altro sta provando in modo rapido e intuitivo.",
+            "Riesco facilmente ad intuire di cosa il mio interlocutore desidera parlare.",
+            "Capisco se qualcuno sta celando le sue vere emozioni.",
+            "Nelle situazioni sociali ho difficoltà a decifrare le regole in modo consapevole.",
+            "Sono bravo/a a prevedere ciò che una persona farà.",
+            "Tendo a farmi coinvolgere emotivamente dai problemi degli amici.",
+            "Di solito tengo in considerazione il punto di vista degli altri anche se non lo condivido."
+    
+        ]
+    },
     'isi': {
         'nome': 'ISI (Insomnia Severity Index)',
         'item_count': 5,
@@ -151,10 +208,112 @@ QUESTIONARI = {
             }
         ]
     },
-
-    'tas20': {'nome': 'TAS-20', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
-    'stai_y1': {'nome': 'STAI-Y-1', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
-    'stai_y2': {'nome': 'STAI-Y-2', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
+    'tas20': {
+        'nome': 'TAS-20 (Toronto Alexithymia Scale)',
+        'descrizione': 'Questionario autosomministrato per la valutazione dell’alessitimia',
+        'item_count': 20,
+        'scale_options': [
+            {'value': 1, 'label': 'Non sono per niente d’accordo'},
+            {'value': 2, 'label': 'Non sono molto d’accordo'},
+            {'value': 3, 'label': 'Non sono né d’accordo né in disaccordo'},
+            {'value': 4, 'label': 'Sono d’accordo in parte'},
+            {'value': 5, 'label': 'Sono completamente d’accordo'}
+        ],
+        'domande': [
+            'Sono spesso confuso/a circa le emozioni che provo',
+            'Mi è difficile trovare le parole giuste per esprimere i miei sentimenti',
+            'Provo delle sensazioni fisiche che neanche i medici capiscono',
+            'Riesco facilmente a descrivere i miei sentimenti',
+            'Preferisco approfondire i miei problemi piuttosto che descriverli semplicemente',
+            'Quando sono sconvolto/a non so se sono triste, spaventato/a o arrabbiato/a',
+            'Sono spesso disorientato dalle sensazioni che provo nel mio corpo',
+            'Preferisco lasciare che le cose seguano il loro corso piuttosto che capire perché sono andate in quel modo',
+            'Provo sentimenti che non riesco proprio ad identificare',
+            'È essenziale conoscere le proprie emozioni',
+            'Mi è difficile descrivere ciò che provo per gli altri',
+            'Gli altri mi chiedono di parlare di più dei miei sentimenti',
+            'Non capisco cosa stia accadendo dentro di me',
+            'Spesso non so perché mi arrabbio',
+            'Con le persone preferisco parlare di cose di tutti i giorni piuttosto che delle loro emozioni',
+            'Preferisco vedere spettacoli leggeri, piuttosto che spettacoli a sfondo psicologico',
+            'Mi è difficile rivelare i sentimenti più profondi anche ad amici più intimi',
+            'Riesco a sentirmi vicino ad una persona, anche se ci capita di stare in silenzio',
+            'Trovo che l’esame dei miei sentimenti mi serve a risolvere i miei problemi personali',
+            'Cercare significati nascosti in films o commedie distoglie dal piacere dello spettacolo'
+        ]
+    },
+    'stai_y1': {
+        'nome': 'STAI-Y1 (State Anxiety)',
+        'descrizione': 'Scala di valutazione dell’ansia di stato',
+        'istruzioni': 'Legga ciascuna frase e indichi come si sente adesso, in questo momento.',
+        'item_count': 20,
+    
+        'scale_options': [
+            {'value': 1, 'label': 'Per nulla'},
+            {'value': 2, 'label': 'Un po'},
+            {'value': 3, 'label': 'Abbastanza'},
+            {'value': 4, 'label': 'Moltissimo'}
+        ],
+    
+        'domande': [
+            "Mi sento calmo",
+            "Mi sento sicuro",
+            "Sono teso",
+            "Ho dei rimpianti",
+            "Mi sento tranquillo",
+            "Mi sento turbato",
+            "Sono attualmente preoccupato per possibili disgrazie",
+            "Mi sento riposato",
+            "Mi sento ansioso",
+            "Mi sento a mio agio",
+            "Mi sento sicuro di me",
+            "Mi sento nervoso",
+            "Sono agitato",
+            "Mi sento molto teso",
+            "Sono rilassato",
+            "Mi sento contento",
+            "Sono preoccupato",
+            "Mi sento sovraccaricato e scosso",
+            "Mi sento allegro",
+            "Mi sento bene"
+        ]
+    },
+    'stai_y2': {
+        'nome': 'STAI-Y2 (Trait Anxiety)',
+        'descrizione': 'Scala di valutazione dell’ansia di tratto',
+        'istruzioni': 'Indichi come si sente generalmente.',
+        'item_count': 20,
+    
+        'scale_options': [
+            {'value': 1, 'label': 'Per nulla'},
+            {'value': 2, 'label': 'Un po'},
+            {'value': 3, 'label': 'Abbastanza'},
+            {'value': 4, 'label': 'Moltissimo'}
+        ],
+    
+        'domande': [
+            "Mi sento bene",
+            "Mi sento teso ed irrequieto",
+            "Sono soddisfatto di me stesso",
+            "Vorrei poter essere felice come sembrano gli altri",
+            "Mi sento un fallito",
+            "Mi sento riposato",
+            "Io sono calmo, tranquillo e padrone di me",
+            "Sento che le difficoltà si accumulano tanto da non poterle superare",
+            "Mi preoccupo troppo di cose che in realtà non hanno importanza",
+            "Sono felice",
+            "Mi vengono pensieri negativi",
+            "Manco di fiducia in me stesso",
+            "Mi sento sicuro",
+            "Prendo decisioni facilmente",
+            "Mi sento inadeguato",
+            "Sono contento",
+            "Pensieri di scarsa importanza mi passano per la mente e mi infastidiscono",
+            "Vivo le delusioni con tanta partecipazione da non poter togliermele dalla testa",
+            "Sono una persona costante",
+            "Divento teso e turbato quando penso alle mie attuali condizioni"
+        ]
+    },
     'gsrs': {
         'nome': 'GSRS (Gastrointestinal Symptom Rating Scale)',
         'item_count': 15,
@@ -214,7 +373,44 @@ QUESTIONARI = {
             "A volte nota cose a cui non aveva prestato attenzione in precedenza e che invece vengono ora ad assumere un significato speciale?"
         ]
     },
-    'ocir': {'nome': 'OCI-R', 'item_count': 18, 'domande': ["Domanda 1", "Domanda 2"]},
+    'ocir': {
+        'nome': 'OCI-R (Obsessive Compulsive Inventory-Revised)',
+        'descrizione': 'Questionario autosomministrato per la valutazione dei sintomi ossessivo-compulsivi',
+        'istruzioni': 'Nella colonna denominata DISAGIO contrassegni il numero che meglio descrive quanto quella particolare esperienza le ha causato disagio o fastidio nell’ultimo mese. Non ci sono risposte giuste o sbagliate.',
+    
+        'item_count': 18,
+    
+        'scale_options': [
+            {'value': 0, 'label': 'Per nulla'},
+            {'value': 1, 'label': 'Un poco'},
+            {'value': 2, 'label': 'Abbastanza'},
+            {'value': 3, 'label': 'Molto'},
+            {'value': 4, 'label': 'Moltissimo'}
+        ],
+    
+        'domande': [
+    
+            "Ho conservato talmente tante cose che ora sono intralciato da esse.",
+            "Ho la tendenza a controllare e ricontrollare le cose molto più spesso del necessario.",
+            "Mi irrito notevolmente se gli oggetti non sono sistemati al loro giusto posto.",
+            "Mi sento costretto a ripetere dei numeri mentre sto facendo delle cose.",
+            "Trovo difficile toccare un oggetto quando so che è stato toccato da estranei o da certe persone.",
+            "Trovo difficile controllare i miei pensieri.",
+            "Accumulo cose di cui non ho bisogno.",
+            "Controllo ripetutamente porte, finestre e cassetti.",
+            "Mi agito se gli altri cambiano il modo in cui ho sistemato le cose.",
+            "Sento di dover ripetere certi numeri.",
+            "Qualche volta devo lavarmi o pulirmi semplicemente perché mi sento contaminato.",
+            "Sono turbato da pensieri spiacevoli che entrano nella mia mente contro la mia volontà.",
+            "Evito di buttare via le cose perché temo che in futuro potrei averne bisogno.",
+            "Controllo ripetutamente i rubinetti del gas, dell’acqua e gli interruttori della luce dopo averli chiusi/spenti.",
+            "Ho bisogno che le cose attorno a me siano sistemate secondo un particolare ordine.",
+            "Ho la sensazione che ci siano numeri buoni e numeri cattivi.",
+            "Mi lavo le mani più spesso e più a lungo del necessario.",
+            "Frequentemente ho pensieri sgradevoli e ho difficoltà a liberarmene."
+    
+        ]
+    },
     'asq': {'nome': 'ASQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]}
 }
 
@@ -288,11 +484,15 @@ def invia_risultati():
         
         # Aggiungi l'interpretazione in base al test
         if test_name == 'gsrs':
-            email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>\n"
+             risultato = calcola_gsrs(risposte_lista)
         elif test_name == 'isi':
-            email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>\n"
+            risultato = calcola_isi(risposte_lista)
         elif test_name == 'asi':
-            email_body += f"<p><strong>Livello:</strong> {risultato['livello']}</p>\n"
+            risultato = calcola_asi(risposte_lista)
+        elif test_name == 'tas20':
+            risultato = calcola_tas20(risposte_lista)
+        else:
+            return jsonify({'success': False, 'message': 'Test non riconosciuto'})
         
         email_body += f"""
             <h2>Risposte Dettagliate</h2>
