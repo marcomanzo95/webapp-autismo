@@ -851,11 +851,10 @@ def invia_risultati():
             print(f"Errore nell'invio dell'email: {str(e)}")
         
         return jsonify({
-            'success': True,
-            'codice_paziente': codice_paziente,
-            'punteggio': risultato['punteggio'],
-            'max_punteggio': risultato['max_punteggio']
-        })
+        'success': True,
+        'codice_paziente': codice_paziente,
+        'risultato': risultato
+    })
     
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
