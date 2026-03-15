@@ -84,8 +84,7 @@ def invia_risultati():
         telefono = dati.get('telefono', 'Non specificato')
         indirizzo = dati.get('indirizzo', 'Non specificato')
         
-       risultati = {}
-
+        risultati = {}
         # Raccogli le risposte dal form (item_1, item_2, ecc.)
         risposte = {}
         for key, value in dati.items():
@@ -117,7 +116,6 @@ def invia_risultati():
             risultati['ocir'] = calcola_ocir(risposte)
         elif nome_test == 'asq' and risposte:
             risultati['asq'] = calcola_asq(risposte)
-
         
         email_body = genera_email_risultati(codice_paziente, genere, istruzione, telefono, indirizzo, risultati)
         invia_email(EMAIL_MITTENTE, EMAIL_DESTINATARIO, email_body, codice_paziente)
