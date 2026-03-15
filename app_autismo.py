@@ -10,6 +10,7 @@ import os
 from datetime import datetime
 import secrets
 #from dotenv import load_dotenv
+from flask_mail import Mail, Message
 
 # Carica le variabili d'ambiente dal file .env
 #load_dotenv()
@@ -40,6 +41,12 @@ EMAIL_MITTENTE = os.environ.get('EMAIL_MITTENTE', 'your_email@gmail.com')
 PASSWORD_APP = os.environ.get('PASSWORD_APP', 'your_app_password')
 EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com')
 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = EMAIL_MITTENTE
+app.config['MAIL_PASSWORD'] = PASSWORD_APP
+mail = Mail(app)
 
 # Dati dei questionari (placeholder)
 QUESTIONARI = {
@@ -122,7 +129,7 @@ QUESTIONARI = {
             "Le capita mai che i suoi pensieri e le sue percezioni diventino troppo rapidi per essere ben assimilati?",
             "A volte nota cose a cui non aveva prestato attenzione in precedenza e che invece vengono ora ad assumere un significato speciale?"
         ]
-    }
+    },
     'ocir': {'nome': 'OCI-R', 'item_count': 18, 'domande': ["Domanda 1", "Domanda 2"]},
     'asq': {'nome': 'ASQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]}
 }
@@ -140,74 +147,95 @@ def questionario(nome_test):
 
 @app.route('/api/invia_risultati', methods=['POST'])
 def invia_risultati():
+    """
+    Riceve le risposte del test e invia i risultati via email al clinico
+    """
     try:
-        if request.is_json:
-            dati = request.json
-        else:
-            dati = request.form.to_dict()
+        test_name = request.form.get('test_name')
+        codice_paziente = request.form.get('codice_paziente')
+        telefono = request.form.get('telefono')
+        indirizzo = request.form.get('indirizzo')
+        genere = request.form.get('genere')
+        istruzione = request.form.get('istruzione')
         
-        print(f"DEBUG: Dati ricevuti: {dati}")  # DEBUG
-        
-        codice_paziente = dati.get('codice_paziente', '')
-        if not codice_paziente:
-            return jsonify({'success': False, 'message': 'Codice paziente mancante'}), 400
-        
-        genere = dati.get('genere', 'Non specificato')
-        istruzione = dati.get('istruzione', 'Non specificata')
-        telefono = dati.get('telefono', 'Non specificato')
-        indirizzo = dati.get('indirizzo', 'Non specificato')
-        
-        risultati = {}
-        # Raccogli le risposte dal form (item_1, item_2, ecc.)
-        risposte_dict = {}
-        for key, value in dati.items():
+        # Estrai le risposte dal form
+        risposte = {}
+        for key in request.form:
             if key.startswith('item_'):
-                # Estrai il numero dalla chiave (item_1 -> 1)
                 item_num = int(key.split('_')[1])
-                risposte_dict[item_num] = int(value)
+                risposte[item_num] = int(request.form.get(key))
         
-        print(f"DEBUG: Risposte raccolte (dict): {risposte_dict}")  # DEBUG
+        # Converti il dizionario in lista ordinata
+        risposte_lista = [risposte.get(i, 0) for i in range(1, len(risposte) + 1)]
         
-        # Determina quale test è stato compilato dal nome del test
-        nome_test = dati.get('test_name', '')
-        test_info = QUESTIONARI.get(nome_test, {})
-        item_count = test_info.get('item_count', 0)
+        # Calcola il punteggio in base al test
+        if test_name == 'gsrs':
+            risultato = calcola_gsrs(risposte_lista)
+        elif test_name == 'isi':
+            risultato = calcola_isi(risposte_lista)
+        elif test_name == 'asi':
+            risultato = calcola_asi(risposte_lista)
+        else:
+            return jsonify({'success': False, 'message': 'Test non riconosciuto'})
         
-        # Converti il dizionario in una lista ordinata
-        risposte = [risposte_dict.get(i, 0) for i in range(1, item_count + 1)]
+        if not risultato:
+            return jsonify({'success': False, 'message': 'Errore nel calcolo del punteggio'})
         
-        print(f"DEBUG: Risposte come lista: {risposte}")  # DEBUG
+        # Prepara il messaggio email
+        email_subject = f"Risultati Test {test_name.upper()} - Codice Paziente: {codice_paziente}"
         
-        if nome_test == 'raads_r' and risposte:
-            risultati['raads_r'] = calcola_raads_r(risposte)
-        elif nome_test == 'aq' and risposte:
-            risultati['aq'] = calcola_aq(risposte)
-        elif nome_test == 'eq' and risposte:
-            risultati['eq'] = calcola_eq(risposte)
-        elif nome_test == 'isi' and risposte:
-            risultati['isi'] = calcola_isi(risposte)
-        elif nome_test == 'tas20' and risposte:
-            risultati['tas20'] = calcola_tas20(risposte)
-        elif nome_test == 'stai_y1' and risposte:
-            risultati['stai_y1'] = calcola_stai_y1(risposte)
-        elif nome_test == 'stai_y2' and risposte:
-            risultati['stai_y2'] = calcola_stai_y2(risposte)
-        elif nome_test == 'gsrs' and risposte:
-            risultati['gsrs'] = calcola_gsrs(risposte)
-        elif nome_test == 'asi' and risposte:
-            risultati['asi'] = calcola_asi(risposte)
-        elif nome_test == 'ocir' and risposte:
-            risultati['ocir'] = calcola_ocir(risposte)
-        elif nome_test == 'asq' and risposte:
-            risultati['asq'] = calcola_asq(risposte)
+        email_body = f"""
+Risultati del Test {QUESTIONARI[test_name]['nome']}
+
+Codice Paziente: {codice_paziente}
+Data: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
+
+--- DATI DEMOGRAFICI ---
+Genere: {genere}
+Istruzione: {istruzione}
+Telefono: {telefono}
+Indirizzo: {indirizzo}
+
+--- RISULTATI ---
+Punteggio: {risultato['punteggio']}/{risultato['max_punteggio']}
+Percentuale: {risultato['percentuale']}%
+"""
         
-        email_body = genera_email_risultati(codice_paziente, genere, istruzione, telefono, indirizzo, risultati)
-        invia_email(EMAIL_MITTENTE, EMAIL_DESTINATARIO, email_body, codice_paziente)
+        # Aggiungi l'interpretazione in base al test
+        if test_name == 'gsrs':
+            email_body += f"Severità: {risultato['severita']}\n"
+        elif test_name == 'isi':
+            email_body += f"Severità: {risultato['severita']}\n"
+        elif test_name == 'asi':
+            email_body += f"Livello: {risultato['livello']}\n"
         
-        return jsonify({'success': True, 'message': 'Risultati inviati con successo.', 'codice_paziente': codice_paziente})
+        email_body += f"""
+--- RISPOSTE ---
+"""
+        for i, risposta in enumerate(risposte_lista, 1):
+            email_body += f"Domanda {i}: {risposta}\n"
+        
+        # Invia l'email
+        try:
+            msg = Message(
+                subject=email_subject,
+                recipients=[os.getenv('EMAIL_DESTINATARIO')],
+                body=email_body
+            )
+            mail.send(msg)
+        except Exception as e:
+            print(f"Errore nell'invio dell'email: {str(e)}")
+        
+        return jsonify({
+            'success': True,
+            'codice_paziente': codice_paziente,
+            'punteggio': risultato['punteggio'],
+            'max_punteggio': risultato['max_punteggio']
+        })
     
     except Exception as e:
-        return jsonify({'success': False, 'message': f'Errore: {str(e)}'}), 500
+        return jsonify({'success': False, 'message': str(e)})
+
 
 def genera_email_risultati(codice, genere, istruzione, telefono, indirizzo, risultati):
     html = f"""
