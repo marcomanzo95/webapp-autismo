@@ -40,13 +40,6 @@ EMAIL_MITTENTE = os.environ.get('EMAIL_MITTENTE', 'your_email@gmail.com')
 PASSWORD_APP = os.environ.get('PASSWORD_APP', 'your_app_password')
 EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com')
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = EMAIL_MITTENTE
-app.config['MAIL_PASSWORD'] = PASSWORD_APP
-mail = Mail(app)
-
 # Dati dei questionari (placeholder)
 QUESTIONARI = {
     'raads_r': {'nome': 'RAADS-R', 'item_count': 80, 'domande': ["Domanda 1", "Domanda 2"]},
