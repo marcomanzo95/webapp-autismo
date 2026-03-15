@@ -12,7 +12,21 @@ import secrets
 from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente dal file .env
-load_dotenv()
+#load_dotenv()
+
+# Leggi il file .env manualmente
+def load_env_file():
+    env_file = os.path.join(os.path.dirname(__file__), '.env')
+    if os.path.exists(env_file):
+        with open(env_file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#'):
+                    key, value = line.split('=', 1)
+                    os.environ[key.strip()] = value.strip()
+
+load_env_file()
+
 
 # Definisci il percorso assoluto della cartella templates
 current_dir = os.path.dirname(os.path.abspath(__file__))
