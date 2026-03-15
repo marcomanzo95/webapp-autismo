@@ -109,18 +109,21 @@ def genera_email_risultati(codice, genere, istruzione, telefono, indirizzo, risu
 
 def invia_email(mittente, destinatario, corpo_html, codice_paziente):
     try:
-        import subprocess
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
         
-        # Crea il messaggio email in formato corretto per ssmtp
-        subject = f"Risultati - {codice_paziente}"
-        msg = f"To: {destinatario}\nFrom: {mittente}\nSubject: {subject}\nContent-Type: text/html; charset=utf-8\n\n{corpo_html}"
+        # Crea il messaggio
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = f'Risultati - {codice_paziente}'
+        msg['From'] = mittente
+        msg['To'] = destinatario
+        msg.attach(MIMEText(corpo_html, 'html'))
         
-        # Usa ssmtp (che è il sendmail su PythonAnywhere)
-        process = subprocess.Popen(['/usr/sbin/sendmail', destinatario], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate(msg.encode('utf-8'))
-        
-        if process.returncode != 0:
-            raise Exception(f"Sendmail error: {stderr.decode('utf-8')}")
+        # Usa localhost (sendmail locale di PythonAnywhere)
+        server = smtplib.SMTP('localhost', 25)
+        server.sendmail(mittente, destinatario, msg.as_string())
+        server.quit()
     except Exception as e:
         raise Exception(f"Errore email: {str(e)}")
 
