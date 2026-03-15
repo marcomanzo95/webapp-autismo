@@ -46,7 +46,21 @@ QUESTIONARI = {
     'raads_r': {'nome': 'RAADS-R', 'item_count': 80, 'domande': ["Domanda 1", "Domanda 2"]},
     'aq': {'nome': 'AQ', 'item_count': 50, 'domande': ["Domanda 1", "Domanda 2"]},
     'eq': {'nome': 'EQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]},
-    'isi': {'nome': 'ISI', 'item_count': 7, 'domande': ["Domanda 1", "Domanda 2"]},
+    'isi': {
+        'nome': 'ISI (Insomnia Severity Index)',
+        'item_count': 7,
+        'scale_type': 'numeric_0_4',
+        'scale_labels': ['No', 'Lieve', 'Media', 'Grave', 'Molto grave'],
+        'domande': [
+            "Difficoltà ad addormentarsi (nelle ultime 2 settimane)",
+            "Difficoltà a restare addormentato (nelle ultime 2 settimane)",
+            "Risveglio troppo precoce (nelle ultime 2 settimane)",
+            "Quanto si sente soddisfatto/insoddisfatto del suo attuale sonno? (Molto soddisfatto=0, Soddisfatto=1, Neutro=2, Non molto soddisfatto=3, Molto insoddisfatto=4)",
+            "In quale misura ritiene che il problema di sonno interferisca con la sua efficienza diurna? (affaticamento diurno, capacità di svolgere lavoro/faccende di casa, concentrazione, memoria, umore, ecc.)",
+            "Quanto pensa che il suo problema di sonno sia evidente agli altri, in termini di peggioramento di qualità della sua vita?",
+            "Quanto si sente preoccupato/a – stressato/a a causa del suo attuale problema di sonno?"
+        ]
+    },
     'tas20': {'nome': 'TAS-20', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y1': {'nome': 'STAI-Y-1', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y2': {'nome': 'STAI-Y-2', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
@@ -72,7 +86,43 @@ QUESTIONARI = {
         ],
         'scale': ['Nessun disagio', 'Disagio minimo', 'Disagio lieve', 'Disagio moderato', 'Disagio medio-grave', 'Disagio grave', 'Disagio molto grave']
     },
-    'asi': {'nome': 'ASI', 'item_count': 29, 'domande': ["Domanda 1", "Domanda 2"]},
+    'asi': {
+        'nome': 'ASI (Aberrant Salience Inventory)',
+        'item_count': 29,
+        'scale_type': 'binary',
+        'scale_labels': ['No', 'Si'],
+        'domande': [
+            "Le è mai capitato di alcune cose di poco conto lo siano apparse improvvisamente importanti o significative?",
+            "Le succede, talvolta, di sentirsi come alla soglia di qualcosa di veramente grande, ma non è sicuro di che cosa sia?",
+            "Le capita, qualche volta, che le sue capacità sensoriali le sembrino acute?",
+            "Si è mai sentito come se stesse rapidamente per raggiungere il massimo delle sue capacità intellettuali?",
+            "Le capita, qualche volta, di prestare attenzione a certi dettagli non notati in precedenza che vengono ad assumere una certa rilevanza per lei?",
+            "Le succede di sentirsi come se ci fosse qualcosa di importante (per lei) da capire, ma non è sicuro di che cosa sia?",
+            "Ha mai passato periodi in cui si è sentito particolarmente religioso o contemplativo?",
+            "Ha mai avuto difficoltà a distinguere se si sente eccitato, spaventato, sconcertato o ansioso?",
+            "Ha mai attraversato dei periodi di maggiore consapevolezza sulle cose?",
+            "Ha mai sentito il bisogno di dare un senso a situazioni o avvenimenti apparentemente casuali?",
+            "Qualche volta le capita di sentirsi come stesse trovando il pezzo mancante di un puzzle?",
+            "A volte si sente come se potesse udire le cose con maggior chiarezza?",
+            "A volte si sente come se fosse una persona particolarmente evoluta dal punto di vista spirituale?",
+            "Osservazioni di norma insignificanti, a volte assumono per lei un significato inusuale?",
+            "Attraversa dei periodi in cui le canzoni talvolta assumono significati rilevanti per la sua vita?",
+            "Qualche volta le capita di sentirsi sul punto di comprendere qualcosa di veramente grande o importante, ma non sa con certezza cosa sia?",
+            "Il suo senso del gusto le è mai sembrato più fine?",
+            "Ha mai avuto la sensazione che i misteri dell'universo fossero sul punto di rivelarsi a lei?",
+            "Le capita di passare periodi in cui si sente eccessivamente stimolato da oggetti o esperienze che normalmente sono poco spiacevoli?",
+            "Rimane spesso affascinato dalle piccole cose che la circondano?",
+            "I suoi sensi le sembrino mai estremamente spiccioli o chiari?",
+            "Si sente mai come se un intero mondo le si stesse rivelando?",
+            "Si è mai sentito come se i confini fra le sue sensazioni interne ed esterne fossero stali tolto?",
+            "Qualche volta le succede di avere la sensazione che il mondo stia cambiando e che lei debba trovare una spiegazione?",
+            "Ha mai percepito un significato travolgente in cose che normalmente per lei non sono significative?",
+            "Ha mai sperimentato una sensazione inesprimibile di urgenza in cui non era sicuro sulla farsi?",
+            "Le è mai capitato di sviluppare in particolare interesse per persone, eventi, luoghi o idee che normalmente non attirebbero in quel modo la sua attenzione?",
+            "Le capita mai che i suoi pensieri e le sue percezioni diventino troppo rapidi per essere ben assimilati?",
+            "A volte nota cose a cui non aveva prestato attenzione in precedenza e che invece vengono ora ad assumere un significato speciale?"
+        ]
+    }
     'ocir': {'nome': 'OCI-R', 'item_count': 18, 'domande': ["Domanda 1", "Domanda 2"]},
     'asq': {'nome': 'ASQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]}
 }
