@@ -9,7 +9,7 @@ from email.mime.multipart import MIMEMultipart
 import os
 from datetime import datetime
 import secrets
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente dal file .env
 #load_dotenv()
