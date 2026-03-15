@@ -147,7 +147,10 @@ def questionario(nome_test):
 def invia_risultati():
     """Riceve i risultati e li invia via email"""
     try:
+        if request.is_json:
         dati = request.json
+    else:
+        dati = request.form.to_dict()
         
         # Estrai i dati demografici
         nome = dati.get('nome', 'Non specificato')
