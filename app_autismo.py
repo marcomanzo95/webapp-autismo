@@ -9,6 +9,10 @@ from email.mime.multipart import MIMEMultipart
 import os
 from datetime import datetime
 import secrets
+from dotenv import load_dotenv
+
+# Carica le variabili d'ambiente dal file .env
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -17,6 +21,7 @@ app.secret_key = secrets.token_hex(16)
 EMAIL_MITTENTE = os.environ.get('EMAIL_MITTENTE', 'your_email@gmail.com')
 PASSWORD_APP = os.environ.get('PASSWORD_APP', 'your_app_password')
 EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com')
+
 
 # Dati dei questionari
 QUESTIONARI = {
