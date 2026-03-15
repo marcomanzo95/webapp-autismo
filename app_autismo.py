@@ -111,18 +111,20 @@ def invia_email(mittente, destinatario, corpo_html, codice_paziente):
     try:
         import subprocess
         
-        # Crea il messaggio email
+        # Crea il messaggio email in formato corretto per ssmtp
         subject = f"Risultati - {codice_paziente}"
-        msg_content = f"Subject: {subject}\nTo: {destinatario}\nFrom: {mittente}\nContent-Type: text/html; charset=utf-8\n\n{corpo_html}"
+        msg = f"To: {destinatario}\nFrom: {mittente}\nSubject: {subject}\nContent-Type: text/html; charset=utf-8\n\n{corpo_html}"
         
-        # Usa il comando 'mail' di PythonAnywhere
-        process = subprocess.Popen(['mail', '-s', subject, destinatario], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate(corpo_html.encode('utf-8'))
+        # Usa ssmtp (che è il sendmail su PythonAnywhere)
+        process = subprocess.Popen(['/usr/sbin/sendmail', destinatario], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate(msg.encode('utf-8'))
         
         if process.returncode != 0:
-            raise Exception(f"Mail error: {stderr.decode('utf-8')}")
+            raise Exception(f"Sendmail error: {stderr.decode('utf-8')}")
     except Exception as e:
         raise Exception(f"Errore email: {str(e)}")
+
+
 
 
 
