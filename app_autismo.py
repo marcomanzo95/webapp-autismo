@@ -86,10 +86,14 @@ def invia_risultati():
         
         risultati = {}
         # Raccogli le risposte dal form (item_1, item_2, ecc.)
+        # Raccogli le risposte dal form (item_1, item_2, ecc.)
         risposte = {}
         for key, value in dati.items():
             if key.startswith('item_'):
-                risposte[key] = int(value)
+                # Estrai il numero dalla chiave (item_1 -> 1)
+                item_num = int(key.split('_')[1])
+                risposte[item_num] = int(value)
+
         
         # Determina quale test è stato compilato dal nome del test
         nome_test = dati.get('test_name', '')
