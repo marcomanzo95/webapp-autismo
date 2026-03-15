@@ -1,13 +1,13 @@
 import os
-import secrets
 from flask import Flask, render_template, request, jsonify
 
-# Configurazione App
-current_dir = os.path.dirname(os.path.abspath(__file__))
-template_dir = os.path.join(current_dir, 'templates')
+# Usa il percorso assoluto completo di PythonAnywhere
+BASE_DIR = "/home/marcomanzo/webapp-autismo"
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 
-app = Flask(__name__, template_folder=template_dir)
-app.secret_key = secrets.token_hex(16)
+app = Flask(__name__, template_folder=TEMPLATE_DIR)
+app.secret_key = os.urandom(24)
+
 
 # Definizione dati (usiamo un nome univoco per forzare il refresh)
 DATI_QUESTIONARI = {
