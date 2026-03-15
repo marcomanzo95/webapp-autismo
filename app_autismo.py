@@ -137,6 +137,7 @@ def questionario(nome_test):
     test_data = QUESTIONARI[nome_test]
     return render_template('questionario.html', test_name=nome_test, test_data=test_data)
 
+
 @app.route('/api/invia_risultati', methods=['POST'])
 def invia_risultati():
     """
@@ -173,48 +174,73 @@ def invia_risultati():
         if not risultato:
             return jsonify({'success': False, 'message': 'Errore nel calcolo del punteggio'})
         
-        # Prepara il messaggio email
-        email_subject = f"Risultati Test {test_name.upper()} - Codice Paziente: {codice_paziente}"
-        
+        # Prepara il messaggio email in HTML
         email_body = f"""
-Risultati del Test {QUESTIONARI[test_name]['nome']}
-
-Codice Paziente: {codice_paziente}
-Data: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
-
---- DATI DEMOGRAFICI ---
-Genere: {genere}
-Istruzione: {istruzione}
-Telefono: {telefono}
-Indirizzo: {indirizzo}
-
---- RISULTATI ---
-Punteggio: {risultato['punteggio']}/{risultato['max_punteggio']}
-Percentuale: {risultato['percentuale']}%
-"""
+        <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <h1>Risultati Test {QUESTIONARI[test_name]['nome']}</h1>
+            <hr>
+            
+            <h2>Dati Paziente</h2>
+            <p><strong>Codice Paziente:</strong> {codice_paziente}</p>
+            <p><strong>Genere:</strong> {genere}</p>
+            <p><strong>Istruzione:</strong> {istruzione}</p>
+            <p><strong>Telefono:</strong> {telefono}</p>
+            <p><strong>Indirizzo:</strong> {indirizzo}</p>
+            <p><strong>Data:</strong> {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}</p>
+            
+            <h2>Risultati</h2>
+            <p><strong>Punteggio:</strong> {risultato['punteggio']}/{risultato['max_punteggio']}</p>
+            <p><strong>Percentuale:</strong> {risultato['percentuale']}%</p>
+        """
         
         # Aggiungi l'interpretazione in base al test
         if test_name == 'gsrs':
-            email_body += f"Severità: {risultato['severita']}\n"
+            email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>\n"
         elif test_name == 'isi':
-            email_body += f"Severità: {risultato['severita']}\n"
+            email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>\n"
         elif test_name == 'asi':
-            email_body += f"Livello: {risultato['livello']}\n"
+            email_body += f"<p><strong>Livello:</strong> {risultato['livello']}</p>\n"
         
         email_body += f"""
---- RISPOSTE ---
-"""
-        for i, risposta in enumerate(risposte_lista, 1):
-            email_body += f"Domanda {i}: {risposta}\n"
+            <h2>Risposte Dettagliate</h2>
+            <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                <tr style="background-color: #f2f2f2;">
+                    <th>Domanda</th>
+                    <th>Risposta</th>
+                </tr>
+        """
         
-        # Invia l'email
+        for i, risposta in enumerate(risposte_lista, 1):
+            email_body += f"<tr><td>Domanda {i}</td><td>{risposta}</td></tr>\n"
+        
+        email_body += """
+            </table>
+            <hr>
+            <p style="font-size: 12px; color: #999;">Email inviata automaticamente dal sistema di valutazione ADHD/Autismo</p>
+        </body>
+        </html>
+        """
+        
+        # Invia l'email usando Gmail SMTP
         try:
-            msg = Message(
-                subject=email_subject,
-                recipients=[os.getenv('EMAIL_DESTINATARIO')],
-                body=email_body
-            )
-            mail.send(msg)
+            mittente = EMAIL_MITTENTE
+            destinatario = EMAIL_DESTINATARIO
+            
+            # Crea il messaggio
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = f'Risultati Test {test_name.upper()} - Codice Paziente: {codice_paziente}'
+            msg['From'] = mittente
+            msg['To'] = destinatario
+            msg.attach(MIMEText(email_body, 'html'))
+            
+            # Usa Gmail SMTP con SSL
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(mittente, PASSWORD_APP)
+            server.sendmail(mittente, destinatario, msg.as_string())
+            server.quit()
+            
+            print(f"Email inviata con successo a {destinatario}")
         except Exception as e:
             print(f"Errore nell'invio dell'email: {str(e)}")
         
