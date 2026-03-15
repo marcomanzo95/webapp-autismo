@@ -84,30 +84,40 @@ def invia_risultati():
         telefono = dati.get('telefono', 'Non specificato')
         indirizzo = dati.get('indirizzo', 'Non specificato')
         
-        risultati = {}
+       risultati = {}
+
+        # Raccogli le risposte dal form (item_1, item_2, ecc.)
+        risposte = {}
+        for key, value in dati.items():
+            if key.startswith('item_'):
+                risposte[key] = int(value)
         
-        if 'raads_r' in dati:
-            risultati['raads_r'] = calcola_raads_r(dati['raads_r'])
-        if 'aq' in dati:
-            risultati['aq'] = calcola_aq(dati['aq'])
-        if 'eq' in dati:
-            risultati['eq'] = calcola_eq(dati['eq'])
-        if 'isi' in dati:
-            risultati['isi'] = calcola_isi(dati['isi'])
-        if 'tas20' in dati:
-            risultati['tas20'] = calcola_tas20(dati['tas20'])
-        if 'stai_y1' in dati:
-            risultati['stai_y1'] = calcola_stai_y1(dati['stai_y1'])
-        if 'stai_y2' in dati:
-            risultati['stai_y2'] = calcola_stai_y2(dati['stai_y2'])
-        if 'gsrs' in dati:
-            risultati['gsrs'] = calcola_gsrs(dati['gsrs'])
-        if 'asi' in dati:
-            risultati['asi'] = calcola_asi(dati['asi'])
-        if 'ocir' in dati:
-            risultati['ocir'] = calcola_ocir(dati['ocir'])
-        if 'asq' in dati:
-            risultati['asq'] = calcola_asq(dati['asq'])
+        # Determina quale test è stato compilato dal nome del test
+        nome_test = dati.get('test_name', '')
+        
+        if nome_test == 'raads_r' and risposte:
+            risultati['raads_r'] = calcola_raads_r(risposte)
+        elif nome_test == 'aq' and risposte:
+            risultati['aq'] = calcola_aq(risposte)
+        elif nome_test == 'eq' and risposte:
+            risultati['eq'] = calcola_eq(risposte)
+        elif nome_test == 'isi' and risposte:
+            risultati['isi'] = calcola_isi(risposte)
+        elif nome_test == 'tas20' and risposte:
+            risultati['tas20'] = calcola_tas20(risposte)
+        elif nome_test == 'stai_y1' and risposte:
+            risultati['stai_y1'] = calcola_stai_y1(risposte)
+        elif nome_test == 'stai_y2' and risposte:
+            risultati['stai_y2'] = calcola_stai_y2(risposte)
+        elif nome_test == 'gsrs' and risposte:
+            risultati['gsrs'] = calcola_gsrs(risposte)
+        elif nome_test == 'asi' and risposte:
+            risultati['asi'] = calcola_asi(risposte)
+        elif nome_test == 'ocir' and risposte:
+            risultati['ocir'] = calcola_ocir(risposte)
+        elif nome_test == 'asq' and risposte:
+            risultati['asq'] = calcola_asq(risposte)
+
         
         email_body = genera_email_risultati(codice_paziente, genere, istruzione, telefono, indirizzo, risultati)
         invia_email(EMAIL_MITTENTE, EMAIL_DESTINATARIO, email_body, codice_paziente)
