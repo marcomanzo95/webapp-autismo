@@ -14,13 +14,18 @@ from dotenv import load_dotenv
 # Carica le variabili d'ambiente dal file .env
 load_dotenv()
 
-app = Flask(__name__)
+# Definisci il percorso assoluto della cartella templates
+current_dir = os.path.dirname(os.path.abspath(__file__))
+template_dir = os.path.join(current_dir, 'templates')
+
+app = Flask(__name__, template_folder=template_dir)
 app.secret_key = secrets.token_hex(16)
 
 # Configurazione email
 EMAIL_MITTENTE = os.environ.get('EMAIL_MITTENTE', 'your_email@gmail.com')
 PASSWORD_APP = os.environ.get('PASSWORD_APP', 'your_app_password')
 EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com')
+
 
 # Dati dei questionari (placeholder)
 QUESTIONARI = {
