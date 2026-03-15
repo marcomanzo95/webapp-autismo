@@ -109,18 +109,24 @@ def invia_risultati():
         
         risultati = {}
         # Raccogli le risposte dal form (item_1, item_2, ecc.)
-        risposte = {}
+        risposte_dict = {}
         for key, value in dati.items():
             if key.startswith('item_'):
                 # Estrai il numero dalla chiave (item_1 -> 1)
                 item_num = int(key.split('_')[1])
-                risposte[item_num] = int(value)
+                risposte_dict[item_num] = int(value)
         
-        print(f"DEBUG: Risposte raccolte: {risposte}")  # DEBUG
-
+        print(f"DEBUG: Risposte raccolte (dict): {risposte_dict}")  # DEBUG
         
         # Determina quale test è stato compilato dal nome del test
         nome_test = dati.get('test_name', '')
+        test_info = QUESTIONARI.get(nome_test, {})
+        item_count = test_info.get('item_count', 0)
+        
+        # Converti il dizionario in una lista ordinata
+        risposte = [risposte_dict.get(i, 0) for i in range(1, item_count + 1)]
+        
+        print(f"DEBUG: Risposte come lista: {risposte}")  # DEBUG
         
         if nome_test == 'raads_r' and risposte:
             risultati['raads_r'] = calcola_raads_r(risposte)
