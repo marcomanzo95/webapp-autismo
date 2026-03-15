@@ -9,10 +9,10 @@ from email.mime.multipart import MIMEMultipart
 import os
 from datetime import datetime
 import secrets
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente dal file .env
-#load_dotenv()
+load_dotenv()
 
 # Definisci il percorso assoluto della cartella templates
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -120,12 +120,14 @@ def invia_email(mittente, destinatario, corpo_html, codice_paziente):
         msg['To'] = destinatario
         msg.attach(MIMEText(corpo_html, 'html'))
         
-        # Usa localhost (sendmail locale di PythonAnywhere)
-        server = smtplib.SMTP('localhost', 25)
+        # Usa Gmail SMTP
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.login(mittente, PASSWORD_APP)
         server.sendmail(mittente, destinatario, msg.as_string())
         server.quit()
     except Exception as e:
         raise Exception(f"Errore email: {str(e)}")
+
 
 
 
