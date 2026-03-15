@@ -9,10 +9,10 @@ from email.mime.multipart import MIMEMultipart
 import os
 from datetime import datetime
 import secrets
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente dal file .env
-load_dotenv()
+#load_dotenv()
 
 # Definisci il percorso assoluto della cartella templates
 current_dir = os.path.dirname(os.path.abspath(__file__))
