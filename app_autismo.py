@@ -14,7 +14,9 @@ from dotenv import load_dotenv
 # Carica le variabili d'ambiente dal file .env
 load_dotenv()
 
-app = Flask(__name__)
+# Definisci il percorso della cartella templates
+template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+app = Flask(__name__, template_folder=template_dir)
 app.secret_key = secrets.token_hex(16)
 
 # Configurazione email
