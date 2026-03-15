@@ -48,18 +48,46 @@ QUESTIONARI = {
     'isi': {
         'nome': 'ISI (Insomnia Severity Index)',
         'item_count': 7,
-        'scale_type': 'numeric_0_4',
-        'scale_labels': ['No', 'Lieve', 'Media', 'Grave', 'Molto grave'],
+        'scale_type': 'custom',  # Scala personalizzata per ogni domanda
         'domande': [
-            "Difficoltà ad addormentarsi (nelle ultime 2 settimane)",
-            "Difficoltà a restare addormentato (nelle ultime 2 settimane)",
-            "Risveglio troppo precoce (nelle ultime 2 settimane)",
-            "Quanto si sente soddisfatto/insoddisfatto del suo attuale sonno? (Molto soddisfatto=0, Soddisfatto=1, Neutro=2, Non molto soddisfatto=3, Molto insoddisfatto=4)",
-            "In quale misura ritiene che il problema di sonno interferisca con la sua efficienza diurna? (affaticamento diurno, capacità di svolgere lavoro/faccende di casa, concentrazione, memoria, umore, ecc.)",
-            "Quanto pensa che il suo problema di sonno sia evidente agli altri, in termini di peggioramento di qualità della sua vita?",
-            "Quanto si sente preoccupato/a – stressato/a a causa del suo attuale problema di sonno?"
+            {
+                'numero': '1a',
+                'testo': 'Difficoltà ad addormentarsi',
+                'scale_labels': ['No', 'Lieve', 'Media', 'Grave', 'Molto grave']
+            },
+            {
+                'numero': '1b',
+                'testo': 'Difficoltà a restare addormentato',
+                'scale_labels': ['No', 'Lieve', 'Media', 'Grave', 'Molto grave']
+            },
+            {
+                'numero': '1c',
+                'testo': 'Risveglio troppo precoce',
+                'scale_labels': ['No', 'Lieve', 'Media', 'Grave', 'Molto grave']
+            },
+            {
+                'numero': '2',
+                'testo': 'Quanto si sente soddisfatto/insoddisfatto del suo attuale sonno?',
+                'scale_labels': ['Molto soddisfatto', 'Soddisfatto', 'Neutro', 'Non molto soddisfatto', 'Molto insoddisfatto']
+            },
+            {
+                'numero': '3',
+                'testo': 'In quale misura ritiene che il problema di sonno interferisca con la sua efficienza diurna? (affaticamento diurno, capacità di svolgere lavoro/faccende di casa, concentrazione, memoria, umore, ecc.)',
+                'scale_labels': ['Per nulla', 'Un po', 'Abbastanza', 'Molto', 'Moltissimo']
+            },
+            {
+                'numero': '4',
+                'testo': 'Quanto pensa che il suo problema di sonno sia evidente agli altri, in termini di peggioramento di qualità della sua vita?',
+                'scale_labels': ['Per nulla', 'Un po', 'Abbastanza', 'Molto', 'Moltissimo']
+            },
+            {
+                'numero': '5',
+                'testo': 'Quanto si sente preoccupato/a – stressato/a a causa del suo attuale problema di sonno?',
+                'scale_labels': ['Per nulla', 'Un po', 'Abbastanza', 'Molto', 'Moltissimo']
+            }
         ]
-    },
+    }
+
     'tas20': {'nome': 'TAS-20', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y1': {'nome': 'STAI-Y-1', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y2': {'nome': 'STAI-Y-2', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
