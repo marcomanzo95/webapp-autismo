@@ -390,51 +390,69 @@ def calcola_ocir(risposte):
         'interpretazione': interpretazione,
         'range_massimo': 72
     }
-
-
-def calcola_asq(risposte):
+def calcola_percentile_da_tabella(punteggio, tabella_percentili):
     """
-    Calcola il punteggio dell'ASQ (Attachment Style Questionnaire)
-    
+    Restituisce il percentile approssimativo sulla base di una tabella ordinata
+    del tipo [(1, 17), (2.5, 20), (5, 23), ...]
+    """
+    percentile_stimato = None
+
+    for percentile, cutoff in tabella_percentili:
+        if punteggio >= cutoff:
+            percentile_stimato = percentile
+        else:
+            break
+
+    return percentile_stimato
+
+
+def calcola_asq(risposte, genere=None):
+    """
+    Calcola i punteggi dell'ASQ (Attachment Style Questionnaire)
+
     Parametri:
     risposte: lista di 40 valori (1-6)
-    
-    Scale principali:
-    1. Fiducia (Trust): item 1, 2, 3, 19, 20, 31, 37, 38 (0-indexed: 0, 1, 2, 18, 19, 30, 36, 37)
-    2. Disagio per l'intimità: item 5, 14, 16, 17, 21, 23, 25, 26, 34, 36 (0-indexed: 4, 13, 15, 16, 20, 22, 24, 25, 33, 35)
-    3. Secondarietà delle relazioni: item 4, 6, 7, 8, 9, 10, 34, 36 (0-indexed: 3, 5, 6, 7, 8, 9, 33, 35)
-    4. Bisogno di approvazione: item 11, 12, 13, 15, 24, 27, 35 (0-indexed: 10, 11, 12, 14, 23, 26, 34)
-    5. Preoccupazione per le relazioni: item 18, 22, 28, 29, 30, 32, 33, 39, 40 (0-indexed: 17, 21, 27, 28, 29, 31, 32, 38, 39)
+    genere: stringa opzionale ('maschio', 'femmina', 'm', 'f')
     """
+
+    if not risposte or len(risposte) < 40:
+        return None
+
     # Scale principali
     fiducia = risposte[0] + risposte[1] + risposte[2] + risposte[18] + risposte[19] + risposte[30] + risposte[36] + risposte[37]
     disagio_intimita = risposte[4] + risposte[13] + risposte[15] + risposte[16] + risposte[20] + risposte[22] + risposte[24] + risposte[25] + risposte[33] + risposte[35]
     secondarieta = risposte[3] + risposte[5] + risposte[6] + risposte[7] + risposte[8] + risposte[9] + risposte[33] + risposte[35]
     bisogno_approvazione = risposte[10] + risposte[11] + risposte[12] + risposte[14] + risposte[23] + risposte[26] + risposte[34]
     preoccupazione = risposte[17] + risposte[21] + risposte[27] + risposte[28] + risposte[29] + risposte[31] + risposte[32] + risposte[38] + risposte[39]
-    
-    # Fattori latenti di secondo ordine
-    # Attaccamento Evitante = Disagio + Secondarietà - Fiducia (negativo)
-    # Attaccamento Ansioso = Bisogno approvazione + Preoccupazione - Fiducia (negativo)
-    
+
     evitamento = disagio_intimita + secondarieta - fiducia
     ansia = bisogno_approvazione + preoccupazione - fiducia
-    
-    # Normalizza i fattori per interpretazione
-    evitamento_normalizzato = evitamento / 100  # Normalizzazione approssimativa
-    ansia_normalizzata = ansia / 100  # Normalizzazione approssimativa
-    
-    # Determina il tipo di attaccamento
-    if ansia_normalizzata < 0.5 and evitamento_normalizzato < 0.5:
-        tipo_attaccamento = "SICURO"
-    elif ansia_normalizzata >= 0.5 and evitamento_normalizzato < 0.5:
-        tipo_attaccamento = "PREOCCUPATO"
-    elif ansia_normalizzata < 0.5 and evitamento_normalizzato >= 0.5:
-        tipo_attaccamento = "DISTANZIANTE"
-    else:
-        tipo_attaccamento = "TIMOROSO"
-    
-    return {
+
+    # Percentili complessivi
+    percentili_globali = {
+        'fiducia': [
+            (1, 17), (2.5, 20), (5, 23), (10, 25), (25, 28),
+            (50, 32), (75, 36), (90, 38), (95, 40), (97.5, 42), (99, 43)
+        ],
+        'disagio_intimita': [
+            (1, 21), (2.5, 23), (5, 25), (10, 28), (25, 32),
+            (50, 37), (75, 42), (90, 47), (95, 49), (97.5, 52), (99, 54)
+        ],
+        'secondarieta': [
+            (1, 7), (2.5, 7), (5, 8), (10, 9), (25, 12),
+            (50, 15), (75, 19), (90, 25), (95, 27), (97.5, 30), (99, 35)
+        ],
+        'bisogno_approvazione': [
+            (1, 9), (2.5, 11), (5, 11), (10, 13), (25, 17),
+            (50, 21), (75, 25), (90, 29), (95, 32), (97.5, 34), (99, 36)
+        ],
+        'preoccupazione': [
+            (1, 13), (2.5, 15), (5, 18), (10, 21), (25, 25),
+            (50, 29), (75, 33), (90, 36), (95, 38), (97.5, 40), (99, 42)
+        ]
+    }
+
+    risultati = {
         'scale': {
             'fiducia': fiducia,
             'disagio_intimita': disagio_intimita,
@@ -446,9 +464,82 @@ def calcola_asq(risposte):
             'evitamento': round(evitamento, 2),
             'ansia': round(ansia, 2)
         },
-        'tipo_attaccamento': tipo_attaccamento,
-        'interpretazione': f"Stile di attaccamento: {tipo_attaccamento}"
+        'percentili_globali': {
+            'fiducia': calcola_percentile_da_tabella(fiducia, percentili_globali['fiducia']),
+            'disagio_intimita': calcola_percentile_da_tabella(disagio_intimita, percentili_globali['disagio_intimita']),
+            'secondarieta': calcola_percentile_da_tabella(secondarieta, percentili_globali['secondarieta']),
+            'bisogno_approvazione': calcola_percentile_da_tabella(bisogno_approvazione, percentili_globali['bisogno_approvazione']),
+            'preoccupazione': calcola_percentile_da_tabella(preoccupazione, percentili_globali['preoccupazione'])
+        },
+        'interpretazione': 'ASQ calcolato correttamente. I punteggi vanno interpretati principalmente sulle cinque scale; i fattori latenti di ansia ed evitamento sono indicatori dimensionali da leggere con cautela.'
     }
+
+    # Percentili per sesso
+    if genere:
+        genere_norm = genere.strip().lower()
+
+        if genere_norm in ['maschio', 'm', 'uomo']:
+            tabelle_sesso = {
+                'fiducia': [
+                    (1, 16), (2.5, 18), (5, 22), (10, 24), (25, 28),
+                    (50, 32), (75, 35.25), (90, 39), (95, 40), (97.5, 41), (99, 43.33)
+                ],
+                'disagio_intimita': [
+                    (1, 20.67), (2.5, 23), (5, 26), (10, 28), (25, 32),
+                    (50, 37), (75, 42), (90, 48), (95, 50), (97.5, 53), (99, 57)
+                ],
+                'secondarieta': [
+                    (1, 7), (2.5, 7), (5, 8), (10, 10), (25, 13),
+                    (50, 17), (75, 21), (90, 26), (95, 29), (97.5, 32), (99, 36)
+                ],
+                'bisogno_approvazione': [
+                    (1, 8.67), (2.5, 11), (5, 11), (10, 13), (25, 16),
+                    (50, 20), (75, 24), (90, 29), (95, 31), (97.5, 32), (99, 34)
+                ],
+                'preoccupazione': [
+                    (1, 13), (2.5, 14), (5, 17), (10, 20), (25, 24),
+                    (50, 29), (75, 33), (90, 36), (95, 38), (97.5, 40), (99, 42)
+                ]
+            }
+
+        elif genere_norm in ['femmina', 'f', 'donna']:
+            tabelle_sesso = {
+                'fiducia': [
+                    (1, 17.76), (2.5, 21), (5, 23), (10, 25), (25, 29),
+                    (50, 33), (75, 36), (90, 38), (95, 40), (97.5, 42), (99, 43)
+                ],
+                'disagio_intimita': [
+                    (1, 20.76), (2.5, 23.40), (5, 25), (10, 27), (25, 32),
+                    (50, 37), (75, 42), (90, 46), (95, 49), (97.5, 51), (99, 53.24)
+                ],
+                'secondarieta': [
+                    (1, 7), (2.5, 7), (5, 7), (10, 9), (25, 11),
+                    (50, 14), (75, 18), (90, 23), (95, 26), (97.5, 29), (99, 32.24)
+                ],
+                'bisogno_approvazione': [
+                    (1, 9), (2.5, 10), (5, 11), (10, 14), (25, 17),
+                    (50, 21), (75, 26), (90, 30), (95, 32), (97.5, 34), (99, 36.24)
+                ],
+                'preoccupazione': [
+                    (1, 12), (2.5, 15), (5, 18.80), (10, 22), (25, 26),
+                    (50, 30), (75, 33), (90, 37), (95, 38.20), (97.5, 40), (99, 42.24)
+                ]
+            }
+        else:
+            tabelle_sesso = None
+
+        if tabelle_sesso:
+            risultati['percentili_per_sesso'] = {
+                'fiducia': calcola_percentile_da_tabella(fiducia, tabelle_sesso['fiducia']),
+                'disagio_intimita': calcola_percentile_da_tabella(disagio_intimita, tabelle_sesso['disagio_intimita']),
+                'secondarieta': calcola_percentile_da_tabella(secondarieta, tabelle_sesso['secondarieta']),
+                'bisogno_approvazione': calcola_percentile_da_tabella(bisogno_approvazione, tabelle_sesso['bisogno_approvazione']),
+                'preoccupazione': calcola_percentile_da_tabella(preoccupazione, tabelle_sesso['preoccupazione'])
+            }
+
+    return risultati
+
+
 # ============================================================================
 # SEZIONE DI TEST - Verifica che tutte le funzioni funzionino correttamente
 # ============================================================================
