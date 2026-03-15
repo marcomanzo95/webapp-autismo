@@ -665,7 +665,7 @@ QUESTIONARI = {
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', questionari=QUESTIONARI)
 
 @app.route('/questionario/<nome_test>')
 def questionario(nome_test):
