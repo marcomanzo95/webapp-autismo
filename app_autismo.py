@@ -147,22 +147,25 @@ def questionario(nome_test):
 def invia_risultati():
     """Riceve i risultati e li invia via email"""
     try:
+        # Gestisci sia JSON che form-urlencoded
         if request.is_json:
-        dati = request.json
-    else:
-        dati = request.form.to_dict()
+            dati = request.json
+        else:
+            dati = request.form.to_dict()
         
-        # Estrai i dati demografici
+        # Estrai il codice paziente
         codice_paziente = dati.get('codice_paziente', '')
         if not codice_paziente:
             return jsonify({
                 'success': False,
                 'message': 'Codice paziente mancante'
             }), 400
-        data_nascita = dati.get('data_nascita', 'Non specificata')
+        
+        # Estrai gli altri dati (opzionali)
         genere = dati.get('genere', 'Non specificato')
         istruzione = dati.get('istruzione', 'Non specificata')
-        
+        telefono = dati.get('telefono', 'Non specificato')
+        indirizzo = dati.get('indirizzo', 'Non specificato')
         
         # Calcola i risultati dei test
         risultati = {}
@@ -192,8 +195,7 @@ def invia_risultati():
         
         # Crea l'email con i risultati
         email_body = genera_email_risultati(
-            codice_paziente, nome, cognome, data_nascita, genere,
-            telefono, indirizzo, istruzione, risultati
+            codice_paziente, genere, istruzione, telefono, indirizzo, risultati
         )
         
         # Invia l'email
@@ -210,6 +212,7 @@ def invia_risultati():
             'success': False,
             'message': f'Errore durante l\'invio: {str(e)}'
         }), 500
+
 
 def genera_email_risultati(codice, nome, cognome, data_nascita, genere, telefono, indirizzo, istruzione, risultati):
     """Genera il corpo dell'email con i risultati"""
