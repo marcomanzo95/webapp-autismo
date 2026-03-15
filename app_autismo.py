@@ -513,11 +513,24 @@ def invia_risultati():
             risultato = calcola_isi(risposte_lista)
         elif test_name == 'asi':
             risultato = calcola_asi(risposte_lista)
+        elif test_name == 'aq':
+            risultato = calcola_aq(risposte_lista)
+        elif test_name == 'eq':
+            risultato = calcola_eq(risposte_lista)
+        elif test_name == 'tas20':
+            risultato = calcola_tas20(risposte_lista)
+        elif test_name == 'stai_y1':
+            risultato = calcola_stai_y1(risposte_lista)
+        elif test_name == 'stai_y2':
+            risultato = calcola_stai_y2(risposte_lista)
+        elif test_name == 'ocir':
+            risultato = calcola_ocir(risposte_lista)
+        elif test_name == 'asq':
+            risultato = calcola_asq(risposte_lista, genere=genere)
+        elif test_name == 'raads_r':
+            risultato = calcola_raads_r(risposte_lista)
         else:
             return jsonify({'success': False, 'message': 'Test non riconosciuto'})
-        
-        if not risultato:
-            return jsonify({'success': False, 'message': 'Errore nel calcolo del punteggio'})
         
         # Prepara il messaggio email in HTML
         email_body = f"""
