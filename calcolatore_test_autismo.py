@@ -135,33 +135,6 @@ def calcola_eq(risposte):
         'range_massimo': 80
     }
 
-
-def calcola_isi(risposte):
-    """
-    Calcola il punteggio dell'ISI (Insomnia Severity Index)
-    
-    Parametri:
-    risposte: lista di 7 valori (0-4)
-    Item 1 contiene 3 sub-item (1a, 1b, 1c), quindi in totale 7 risposte
-    """
-    punteggio_totale = sum(risposte)
-    
-    if punteggio_totale <= 7:
-        interpretazione = "No clinically significant insomnia"
-    elif punteggio_totale <= 14:
-        interpretazione = "Subthreshold insomnia"
-    elif punteggio_totale <= 21:
-        interpretazione = "Clinical insomnia (moderate severity)"
-    else:
-        interpretazione = "Clinical insomnia (severe)"
-    
-    return {
-        'punteggio_totale': punteggio_totale,
-        'interpretazione': interpretazione,
-        'range_massimo': 28
-    }
-
-
 def calcola_tas20(risposte):
     """
     Calcola il punteggio della TAS-20 (Toronto Alexithymia Scale)
@@ -302,28 +275,74 @@ def calcola_gsrs(risposte):
         'range_massimo': 1
     }
 
-def calcola_asi(risposte):
+def calcola_isi(risposte):
     """
-    Calcola il punteggio dell'ASI (Anxiety Sensitivity Index)
+    Calcola il punteggio ISI (Insomnia Severity Index)
+    Scala: 0-4 per tutte le 7 domande
+    Punteggio totale: 0-28
     
-    Parametri:
-    risposte: lista di 29 valori (0 o 1, dove 0=No, 1=Sì)
+    Interpretazione:
+    - 0-7: Nessuna insonnia
+    - 8-14: Insonnia subclinica
+    - 15-21: Insonnia moderata
+    - 22-28: Insonnia grave
     """
-    punteggio_totale = sum(risposte)
+    if not risposte or len(risposte) < 7:
+        return None
     
-    # Interpretazione basata su letteratura clinica
-    if punteggio_totale >= 20:
-        interpretazione = "Alta sensibilità all'ansia (punteggio ≥ 20)"
-    elif punteggio_totale >= 10:
-        interpretazione = "Moderata sensibilità all'ansia (punteggio 10-19)"
+    # Somma i punteggi delle 7 domande
+    punteggio_totale = sum(int(r) for r in risposte[:7])
+    
+    # Determina la severità
+    if punteggio_totale <= 7:
+        severita = "Nessuna insonnia"
+    elif punteggio_totale <= 14:
+        severita = "Insonnia subclinica"
+    elif punteggio_totale <= 21:
+        severita = "Insonnia moderata"
     else:
-        interpretazione = "Bassa sensibilità all'ansia (punteggio < 10)"
+        severita = "Insonnia grave"
     
     return {
-        'punteggio_totale': punteggio_totale,
-        'interpretazione': interpretazione,
-        'range_massimo': 29
+        'punteggio': punteggio_totale,
+        'max_punteggio': 28,
+        'percentuale': round((punteggio_totale / 28) * 100, 2),
+        'severita': severita
     }
+
+
+def calcola_asi(risposte):
+    """
+    Calcola il punteggio ASI (Aberrant Salience Inventory)
+    Scala: 0-1 (No/Si) per tutte le 29 domande
+    Punteggio totale: 0-29
+    
+    Interpretazione:
+    - 0-9: Basso (normale)
+    - 10-19: Moderato
+    - 20-29: Alto (possibile indicatore di salienza aberrante)
+    """
+    if not risposte or len(risposte) < 29:
+        return None
+    
+    # Somma i punteggi delle 29 domande
+    punteggio_totale = sum(int(r) for r in risposte[:29])
+    
+    # Determina il livello
+    if punteggio_totale <= 9:
+        livello = "Basso (normale)"
+    elif punteggio_totale <= 19:
+        livello = "Moderato"
+    else:
+        livello = "Alto (possibile indicatore di salienza aberrante)"
+    
+    return {
+        'punteggio': punteggio_totale,
+        'max_punteggio': 29,
+        'percentuale': round((punteggio_totale / 29) * 100, 2),
+        'livello': livello
+    }
+
 
 
 def calcola_ocir(risposte):
