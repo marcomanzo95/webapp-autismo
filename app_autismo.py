@@ -411,7 +411,64 @@ QUESTIONARI = {
     
         ]
     },
-    'asq': {'nome': 'ASQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]}
+    'asq': {
+        'nome': 'ASQ (Attachment Style Questionnaire)',
+        'descrizione': 'Questionario autosomministrato per la valutazione dello stile di attaccamento adulto',
+        'istruzioni': 'Indichi quanto concorda con ciascuna delle seguenti affermazioni, valutandole in base a questa scala: 1 = Totalmente in disaccordo; 2 = Fortemente in disaccordo; 3 = Lievemente in disaccordo; 4 = Lievemente d’accordo; 5 = Fortemente d’accordo; 6 = Totalmente d’accordo.',
+        'item_count': 40,
+    
+        'scale_options': [
+            {'value': 1, 'label': 'Totalmente in disaccordo'},
+            {'value': 2, 'label': 'Fortemente in disaccordo'},
+            {'value': 3, 'label': 'Lievemente in disaccordo'},
+            {'value': 4, 'label': 'Lievemente d’accordo'},
+            {'value': 5, 'label': 'Fortemente d’accordo'},
+            {'value': 6, 'label': 'Totalmente d’accordo'}
+        ],
+    
+        'domande': [
+            "Nel complesso sono una persona valida",
+            "E’ più facile arrivare a conoscere me che la maggior parte delle altre persone",
+            "Sono fiducioso che gli altri ci saranno quando avrò bisogno di loro",
+            "Preferisco dipendere da me stesso invece che dagli altri",
+            "Preferisco stare sulle mie",
+            "Chiedere aiuto equivale ad ammettere di essere un fallimento",
+            "Il valore di una persona andrebbe valutato in base ai suoi successi",
+            "Raggiungere degli obbiettivi è più importante che costruire delle relazioni",
+            "Dare il massimo è più importante che andare d’accordo con gli altri",
+            "Se hai un lavoro da fare, non dovrebbe importarti di chi ne avrà un danno",
+            "Per me è importante piacere agli altri",
+            "Per me è importante evitare di fare delle cose che agli altri non piacciono",
+            "Trovo difficile prendere una decisione a meno che non sappia ciò che pensano gli altri",
+            "Le mie relazioni con gli altri sono solitamente superficiali",
+            "A volte penso di non valere nulla",
+            "Ho difficoltà a fidarmi degli altri",
+            "Ho difficoltà a dipendere dagli altri",
+            "Trovo che gli altri siano riluttanti ad entrare in confidenza quanto io vorrei",
+            "Trovo relativamente facile entrare in confidenza con gli altri",
+            "Mi fido facilmente degli altri",
+            "Mi trovo a mio agio nel dipendere dagli altri",
+            "Mi preoccupo che agli altri non importerà di me quanto a me importa di loro",
+            "Mi preoccupo quando la gente entra troppo in confidenza",
+            "Mi preoccupo di non essere all’altezza degli altri",
+            "Ho sentimenti contrastanti circa l’essere in confidenza con gli altri",
+            "Se da un lato voglio entrare in confidenza con gli altri, dall’altro mi sento a disagio",
+            "Mi chiedo perché la gente voglia avere a che fare con me",
+            "Per me è veramente importante avere una relazione stretta",
+            "Mi preoccupo molto delle mie relazioni",
+            "Mi chiedo come me la caverei senza qualcuno che mi ami",
+            "Mi sento fiducioso nelle relazioni con gli altri",
+            "Spesso mi sento lasciato in disparte o solo",
+            "Spesso mi preoccupo di non riuscire ad entrare in sintonia con gli altri",
+            "Gli altri hanno i loro problemi, per cui non li infastidisco coi miei",
+            "Quando discuto dei miei problemi con gli altri, di solito mi vergogno o mi sento stupido",
+            "Sono troppo impegnato in altre attività per dedicare molto tempo alle relazioni",
+            "Se qualcosa mi disturba, gli altri solitamente ne sono consapevoli e preoccupati",
+            "Sono fiducioso di essere gradito e rispettato dagli altri",
+            "Mi sento frustrato quando gli altri non sono disponibili nel momento in cui ne ho bisogno",
+            "Gli altri spesso mancano alle mie aspettative"
+        ]
+    },
 }
 
 @app.route('/')
