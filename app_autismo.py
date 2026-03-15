@@ -29,7 +29,7 @@ EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com'
 
 # Dati dei questionari (placeholder)
 QUESTIONARI = {
-    'raads_r': {'nome': 'RAADS-R', 'item_count': 80, 'domande': ["Domanda 1", "Domanda 2"]},
+    'raads_r': {'nome': 'RAADS-R', 'item_count': 80, 'domande': ["Domanda 1", "Domanda 2"]},def
     'aq': {'nome': 'AQ', 'item_count': 50, 'domande': ["Domanda 1", "Domanda 2"]},
     'eq': {'nome': 'EQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]},
     'isi': {'nome': 'ISI', 'item_count': 7, 'domande': ["Domanda 1", "Domanda 2"]},
@@ -109,17 +109,19 @@ def genera_email_risultati(codice, genere, istruzione, telefono, indirizzo, risu
 
 def invia_email(mittente, destinatario, corpo_html, codice_paziente):
     try:
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'Risultati - {codice_paziente}'
-        msg['From'] = mittente
-        msg['To'] = destinatario
-        msg.attach(MIMEText(corpo_html, 'html'))
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login(mittente, PASSWORD_APP)
-        server.sendmail(mittente, destinatario, msg.as_string())
-        server.quit()
+        # Usa il servizio email di PythonAnywhere (sendmail)
+        import subprocess
+        msg = f"Subject: Risultati - {codice_paziente}\nTo: {destinatario}\nContent-Type: text/html\n\n{corpo_html}"
+        
+        # Usa sendmail di PythonAnywhere
+        proc = subprocess.Popen(['/usr/sbin/sendmail', '-t'], stdin=subprocess.PIPE)
+        proc.communicate(msg.encode('utf-8'))
+        
+        if proc.returncode != 0:
+            raise Exception("Sendmail ha restituito un errore")
     except Exception as e:
         raise Exception(f"Errore email: {str(e)}")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
