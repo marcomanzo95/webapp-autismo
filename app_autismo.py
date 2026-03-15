@@ -473,8 +473,9 @@ QUESTIONARI = {
 
 @app.route('/')
 def index():
-    # Usa la variabile 'questionari' (minuscola) che hai definito all'inizio del file
-    return render_template('index.html', questionari=questionari)
+    # Deve essere QUESTIONARI (maiuscolo) dopo l'uguale!
+    return render_template('index.html', questionari=QUESTIONARI)
+
 
 
 
