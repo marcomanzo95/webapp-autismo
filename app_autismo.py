@@ -9,8 +9,7 @@ from email.mime.multipart import MIMEMultipart
 import os
 from datetime import datetime
 import secrets
-#from dotenv import load_dotenv
-from flask_mail import Mail, Message
+
 
 # Carica le variabili d'ambiente dal file .env
 #load_dotenv()
