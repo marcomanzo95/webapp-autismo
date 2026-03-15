@@ -109,18 +109,21 @@ def genera_email_risultati(codice, genere, istruzione, telefono, indirizzo, risu
 
 def invia_email(mittente, destinatario, corpo_html, codice_paziente):
     try:
-        # Usa il servizio email di PythonAnywhere (sendmail)
         import subprocess
-        msg = f"Subject: Risultati - {codice_paziente}\nTo: {destinatario}\nContent-Type: text/html\n\n{corpo_html}"
         
-        # Usa sendmail di PythonAnywhere
-        proc = subprocess.Popen(['/usr/sbin/sendmail', '-t'], stdin=subprocess.PIPE)
-        proc.communicate(msg.encode('utf-8'))
+        # Crea il messaggio email
+        subject = f"Risultati - {codice_paziente}"
+        msg_content = f"Subject: {subject}\nTo: {destinatario}\nFrom: {mittente}\nContent-Type: text/html; charset=utf-8\n\n{corpo_html}"
         
-        if proc.returncode != 0:
-            raise Exception("Sendmail ha restituito un errore")
+        # Usa il comando 'mail' di PythonAnywhere
+        process = subprocess.Popen(['mail', '-s', subject, destinatario], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate(corpo_html.encode('utf-8'))
+        
+        if process.returncode != 0:
+            raise Exception(f"Mail error: {stderr.decode('utf-8')}")
     except Exception as e:
         raise Exception(f"Errore email: {str(e)}")
+
 
 
 if __name__ == '__main__':
