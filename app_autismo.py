@@ -47,7 +47,7 @@ QUESTIONARI = {
     'eq': {'nome': 'EQ', 'item_count': 40, 'domande': ["Domanda 1", "Domanda 2"]},
     'isi': {
         'nome': 'ISI (Insomnia Severity Index)',
-        'item_count': 7,
+        'item_count': 5,
         'scale_type': 'custom',  # Scala personalizzata per ogni domanda
         'domande': [
             {
