@@ -86,7 +86,7 @@ QUESTIONARI = {
                 'scale_labels': ['Per nulla', 'Un po', 'Abbastanza', 'Molto', 'Moltissimo']
             }
         ]
-    }
+    },
 
     'tas20': {'nome': 'TAS-20', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
     'stai_y1': {'nome': 'STAI-Y-1', 'item_count': 20, 'domande': ["Domanda 1", "Domanda 2"]},
