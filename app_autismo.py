@@ -118,8 +118,43 @@ def invia_risultati():
         return jsonify({'success': False, 'message': f'Errore: {str(e)}'}), 500
 
 def genera_email_risultati(codice, genere, istruzione, telefono, indirizzo, risultati):
-    html = f"<html><body><h1>Valutazione ADHD</h1><p>Codice: {codice}</p></body></html>"
+    html = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <h1>Valutazione ADHD/Autismo</h1>
+        <hr>
+        
+        <h2>Dati Paziente</h2>
+        <p><strong>Codice Paziente:</strong> {codice}</p>
+        <p><strong>Genere:</strong> {genere}</p>
+        <p><strong>Istruzione:</strong> {istruzione}</p>
+        <p><strong>Telefono:</strong> {telefono}</p>
+        <p><strong>Indirizzo:</strong> {indirizzo}</p>
+        
+        <h2>Risultati Test</h2>
+    """
+    
+    if risultati:
+        for test_name, risultato in risultati.items():
+            html += f"<h3>{test_name.upper()}</h3>"
+            html += f"<p><strong>Punteggio:</strong> {risultato.get('punteggio_totale', 'N/A')}</p>"
+            html += f"<p><strong>Interpretazione:</strong> {risultato.get('interpretazione', 'N/A')}</p>"
+            if 'sottoscale' in risultato:
+                html += "<p><strong>Sottoscale:</strong></p><ul>"
+                for subscale, valore in risultato['sottoscale'].items():
+                    html += f"<li>{subscale}: {valore}</li>"
+                html += "</ul>"
+    else:
+        html += "<p>Nessun risultato disponibile</p>"
+    
+    html += """
+        <hr>
+        <p style="color: #666; font-size: 12px;">Questo è un messaggio automatico. Non rispondere a questa email.</p>
+    </body>
+    </html>
+    """
     return html
+
 
 def invia_email(mittente, destinatario, corpo_html, codice_paziente):
     try:
