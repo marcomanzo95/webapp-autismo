@@ -343,7 +343,7 @@ QUESTIONARI = {
     },
     'isi': {
         'nome': 'ISI (Insomnia Severity Index)',
-        'item_count': 5,
+        'item_count': 7,
         'scale_type': 'custom',  # Scala personalizzata per ogni domanda
         'domande': [
             {
