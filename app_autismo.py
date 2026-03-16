@@ -42,7 +42,199 @@ EMAIL_DESTINATARIO = os.environ.get('EMAIL_DESTINATARIO', 'your_email@gmail.com'
 
 # Dati dei questionari (placeholder)
 QUESTIONARI = {
-    'raads_r': {'nome': 'RAADS-R', 'item_count': 80, 'domande': ["Domanda 1", "Domanda 2"]},
+    'raads_r': {
+        'nome': 'RAADS-R',
+        'descrizione': 'Ritvo Autism Asperger Diagnostic Scale-Revised - versione italiana',
+        'istruzioni': 'Segna una sola casella per ogni riga. Le risposte possibili sono: Vero ora e quando ero giovane; Vero solo ora; Vero solo quando ero giovane (<16 anni); Mai vero.',
+    
+        'item_count': 80,
+    
+        # Mappatura pratica coerente con la tua funzione calcola_raads_r,
+        # che lavora su valori 0-3.
+        'scale_options': [
+            {'value': 3, 'label': 'Vero ora e quando ero giovane'},
+            {'value': 2, 'label': 'Vero solo ora'},
+            {'value': 1, 'label': 'Vero solo quando ero giovane (<16 anni)'},
+            {'value': 0, 'label': 'Mai vero'}
+        ],
+    
+        'campi_preliminari': [
+            {'name': 'nome', 'label': 'Nome', 'type': 'text'},
+            {'name': 'cognome', 'label': 'Cognome', 'type': 'text'},
+            {'name': 'via', 'label': 'Via', 'type': 'text'},
+            {'name': 'cap', 'label': 'CAP', 'type': 'text'},
+            {'name': 'citta', 'label': 'Città', 'type': 'text'},
+            {'name': 'provincia', 'label': 'Provincia', 'type': 'text'},
+            {'name': 'telefono_raads', 'label': 'Numero di telefono', 'type': 'text'},
+            {'name': 'email_raads', 'label': 'E-mail', 'type': 'email'},
+            {'name': 'data_oggi', 'label': 'Data di oggi', 'type': 'date'},
+            {'name': 'eta_raads', 'label': 'Età (in anni)', 'type': 'number'},
+    
+            {
+                'name': 'sesso_raads',
+                'label': 'Sesso',
+                'type': 'radio',
+                'options': ['Maschio', 'Femmina']
+            },
+            {
+                'name': 'stato_civile_raads',
+                'label': 'Stato civile',
+                'type': 'radio',
+                'options': ['Single', 'Sposato', 'Divorziato', 'Impegnato']
+            },
+            {
+                'name': 'hai_figli',
+                'label': 'Hai figli?',
+                'type': 'radio',
+                'options': ['Si', 'No']
+            },
+            {
+                'name': 'figli_specifica',
+                'label': "Se sì, specifica sesso, età, presenza di qualsiasi condizione psichiatrica o neurologica incluse l'autismo e la Sindrome di Asperger",
+                'type': 'textarea'
+            },
+            {
+                'name': 'patente_guida',
+                'label': 'Hai mai avuto la patente di guida?',
+                'type': 'radio',
+                'options': ['Si', 'No']
+            },
+    
+            {
+                'name': 'istruzione_raads',
+                'label': 'Qual è il grado di istruzione più alto di cui sei in possesso?',
+                'type': 'radio',
+                'options': [
+                    'Licenza elementare',
+                    'Licenza media',
+                    'Diploma di scuola superiore',
+                    'Diploma di Laurea (triennale)',
+                    'Diploma di Laurea (specialistica)',
+                    'Master post Laurea',
+                    'Specializzazione post-laurea',
+                    'Dottorato di Ricerca'
+                ]
+            },
+            {
+                'name': 'sostegno_scuola',
+                'label': 'A scuola avevi il sostegno?',
+                'type': 'radio',
+                'options': ['Si', 'No']
+            },
+            {
+                'name': 'misure_compensative',
+                'label': 'A scuola avevi misure compensative o dispensative?',
+                'type': 'radio',
+                'options': ['Si', 'No']
+            },
+    
+            {
+                'name': 'diagnosi_pregressa_presenza',
+                'label': "Sei mai stato diagnosticato con Disturbo dello Spettro Autistico, Autismo, Sindrome di Asperger, Autismo ad alto funzionamento, Disturbo pervasivo dello sviluppo, Disturbo generalizzato dello sviluppo, Dislessia, Disgrafia, Discalculia, Disortografia, Disprassia, ritardo del linguaggio, disturbo specifico del linguaggio, ritardo mentale, disturbo specifico dell'apprendimento, deficit d'attenzione, iperattività, disturbo ossessivo compulsivo, anoressia, disturbi della condotta alimentare, disturbo della sfera affettiva, disturbo della relazione, epilessia o qualsiasi altra diagnosi psichiatrica, psicologica o neurologica?",
+                'type': 'radio',
+                'options': ['Si', 'No']
+            },
+            {'name': 'diagnosi_pregressa', 'label': 'Diagnosi', 'type': 'text'},
+            {'name': 'chi_ha_fatto_diagnosi', 'label': "Nome del dottore, clinica o altro", 'type': 'text'},
+            {'name': 'data_diagnosi', 'label': 'Data della diagnosi', 'type': 'text'},
+    
+            {
+                'name': 'prima_parola',
+                'label': 'A che età hai iniziato a parlare? Prima parola',
+                'type': 'radio',
+                'options': ['Prima dei 12 mesi', 'Prima dei 2 anni', 'Prima dei 3 anni', 'Prima dei 4 anni']
+            },
+            {
+                'name': 'prima_frase',
+                'label': 'A che età hai iniziato a parlare? Prima frase',
+                'type': 'radio',
+                'options': ['Prima dei 12 mesi', 'Prima dei 2 anni', 'Prima dei 3 anni', 'Prima dei 4 anni']
+            }
+        ],
+    
+        'domande': [
+            "Sono una persona amichevole: gradevole, gioviale, affettuosa con gli altri.",
+            "Uso spesso parole o frasi tratte da film e televisione durante le conversazioni.",
+            "Sono spesso sorpreso quando gli altri mi dicono che sono stato insensibile o maleducato.",
+            "A volte parlo a voce troppo alta o troppo bassa e non me ne accorgo.",
+            "Spesso non so come comportarmi nelle situazioni sociali.",
+            "Sono capace a mettermi 'nei panni degli altri'.",
+            "A volte ho difficoltà a capire cosa significano frasi come: 'sei la luce dei miei occhi'.",
+            "Mi piace parlare solo con le persone che condividono i miei interessi speciali.",
+            "Mi focalizzo sui dettagli invece che sull'idea generale.",
+            "Noto sempre la sensazione fisica che mi dà il cibo in bocca. Questo per me è più importante che il sapore.",
+            "Mi mancano i miei migliori amici o la famiglia quando siamo distanti per lungo tempo.",
+            "A volte offendo gli altri dicendo quello che penso, anche se non ne ho intenzione.",
+            "Mi piace pensare e parlare solo di quelle poche cose che mi interessano.",
+            "Se devo andare a mangiare al ristorante, preferisco andarci da solo piuttosto che con qualcuno che conosco.",
+            "Non saprei immaginare come sarebbe essere qualcun altro.",
+            "Mi è stato detto che sono goffo o scoordinato.",
+            "Gli altri mi considerano strano e diverso.",
+            "Capisco quando gli amici hanno bisogno di conforto.",
+            "Sono ipersensibile alla sensazione tattile causata dai vestiti sulla mia pelle. Come li sento addosso è più importante di come appaiono esteriormente.",
+            "Preferisco copiare il modo in cui certe persone parlano o si comportano. Mi aiuta a sembrare più normale.",
+            "Posso provare una forte ansia se devo parlare con più di una persona contemporaneamente.",
+            "Devo 'agire come una persona normale' per accontentare gli altri e farmi accettare.",
+            "Di solito per me è facile conoscere nuove persone.",
+            "Mi confonde (perdo il filo del discorso) quando qualcuno mi interrompe mentre sto parlando di qualcosa per me molto interessante.",
+            "È difficile per me capire cosa provano le altre persone mentre stiamo parlando.",
+            "Mi piace avere una conversazione con molte persone contemporaneamente, ad esempio a pranzo, a scuola o a lavoro.",
+            "Prendo le cose troppo letteralmente, quindi spesso non colgo cosa le persone intendono dire.",
+            "Per me è molto difficile capire il motivo per cui una persona è imbarazzata o gelosa.",
+            "Alcuni tessuti comuni che non danno fastidio agli altri, mi procurano molto fastidio quando toccano la mia pelle.",
+            "Mi agito molto quando sono obbligato a cambiare improvvisamente il modo abituale con cui faccio le cose.",
+            "Non ho mai voluto avere o ho sentito il bisogno di una relazione che le altre persone chiamano 'intima'.",
+            "Per me è difficile sia iniziare che terminare una conversazione. Sento il bisogno di proseguire finché non ho finito.",
+            "Parlo con un ritmo di voce normale.",
+            "Lo stesso suono, colore o tessuto può passare improvvisamente dal provocarmi forti reazioni fisiche o emotive all'essermi indifferente (e viceversa).",
+            "La frase 'ti sento dentro' mi provoca una sensazione di disagio.",
+            "A volte il suono di una parola o un rumore acuto possono essere dolorosi per le mie orecchie.",
+            "Sono disponibile a comprendere le ragioni degli altri.",
+            "Non mi immedesimo emotivamente con i protagonisti dei film e non riesco a provare ciò che loro provano.",
+            "Non so capire quando qualcuno sta flirtando con me.",
+            "Sono in grado di visualizzare nei minimi dettagli ciò che mi interessa.",
+            "Tengo liste di cose che mi interessano, anche se non hanno un uso pratico (es. statistiche sportive, calendari, fatti storici, date, etc.).",
+            "Troppi stimoli sensoriali mi sovraccaricano e mi sento schiacciato. Per stare meglio ho bisogno di isolarmi.",
+            "Mi piace discutere di diversi argomenti con i miei amici.",
+            "Non sono in grado di capire se qualcuno è interessato o annoiato da quello di cui sto parlando.",
+            "Mi risulta molto difficile interpretare le espressioni del viso e il linguaggio del corpo delle persone con cui sto parlando.",
+            "Le stesse cose (come i vestiti o la temperatura) possono darmi sensazioni molto diverse in momenti differenti.",
+            "Mi trovo molto a mio agio durante un appuntamento o nelle situazioni sociali.",
+            "Quando le persone mi parlano dei loro problemi, cerco di aiutarle al meglio delle mie possibilità.",
+            "Mi è stato detto che ho una voce strana (ad esempio piatta, monotona, infantile, acuta, etc.).",
+            "A volte un pensiero o un argomento mi si fissa nella mente a tal punto che non riesco a fare a meno di parlarne anche se nessuno sembra interessato.",
+            "Tendo a fare in continuazione movimenti particolari con le mani (come sfarfallare, rigirare lacci o bastoncini, muoverle davanti ai miei occhi, etc.).",
+            "Non sono mai stato interessato agli argomenti considerati interessanti dalla maggioranza delle persone.",
+            "Sono considerata una persona compassionevole: se vedo qualcuno stare male provo anche io una sensazione di sofferenza e il desiderio di aiutarlo.",
+            "Quando sto insieme agli altri seguo un insieme specifico di regole che mi aiutano a sembrare normale.",
+            "Per me è molto difficile lavorare e sentirmi a mio agio in un gruppo.",
+            "Quando parlo con qualcuno, è difficile cambiare l'argomento della conversazione. Quando lo fa la persona con cui sto parlando posso diventare molto agitato e confuso.",
+            "A volte ho bisogno di coprirmi le orecchie per bloccare rumori fastidiosi (come aspirapolveri o persone che parlano troppo o sono troppo rumorose).",
+            "Sono in grado di parlare facilmente con le persone e fare chiacchiere di cortesia.",
+            "A volte non provo dolore per cose che lo provocano negli altri (per esempio quando mi faccio male da solo o mi brucio una mano su una pentola bollente).",
+            "Quando parlo con qualcuno, trovo molto difficile capire quando è il mio turno di parlare e quando quello di ascoltare.",
+            "Chi mi conosce bene mi considera un solitario.",
+            "Solitamente parlo con un tono di voce normale.",
+            "Mi piace che le cose siano esattamente le stesse, giorno dopo giorno, anche piccoli cambiamenti nelle mie routine mi agitano.",
+            "Per me è un mistero come fare amici e socializzare.",
+            "Mi calma girare su me stesso o dondolarmi su una sedia quando sono stressato.",
+            "La frase 'gli ha parlato con il cuore in mano' non ha senso per me.",
+            "Se sono in un ambiente in cui ci sono molti odori, sensazioni tattili, rumori e luci brillanti, mi sento ansioso o spaventato.",
+            "Sono in grado di capire quando qualcuno intende comunicare una cosa diversa da quella che dice a parole.",
+            "Mi piace stare per conto mio più tempo possibile.",
+            "I miei penseri sono conservati nella memoria come fossero schede di un archivio, quando devo prendere quelli che mi interessano cerco all'interno dello schedario per trovare quello giusto (o qualsiasi altro modo unico di pensare).",
+            "Lo stesso suono sembra a volte molto rumoroso e altre volte molto leggero anche se sono consapevole che non è cambiato.",
+            "Mi piace trascorrere il mio tempo mangiando e parlando con familiari ed amici.",
+            "Non riesco a tollerare le cose che non mi piacciono (come odori, tessuti, suoni o colori).",
+            "Non mi piace essere abbracciato o ricevere altre manifestazioni fisiche di affetto.",
+            "Quando devo andare da qualche parte ho bisogno di seguire una strada familiare, altrimenti posso sentirmi molto confuso ed agitato.",
+            "È difficile immaginare ciò che gli altri si aspettano da me.",
+            "Mi piace avere amici intimi.",
+            "Le persone mi dicono che fornisco spesso troppi dettagli.",
+            "Mi dicono spesso che faccio domande imbarazzanti.",
+            "Tendo a puntualizzare gli errori degli altri."
+        ]
+    },
     # Dizionario per il test AQ (Autism‑Spectrum Quotient)
     'aq': {
         'nome': 'AQ (Autism‑Spectrum Quotient)',
@@ -247,7 +439,7 @@ QUESTIONARI = {
         'descrizione': 'Scala di valutazione dell’ansia di stato',
         'istruzioni': 'Legga ciascuna frase e indichi come si sente adesso, in questo momento.',
         'item_count': 20,
-    
+        
         'scale_options': [
             {'value': 1, 'label': 'Per nulla'},
             {'value': 2, 'label': 'Un po'},
