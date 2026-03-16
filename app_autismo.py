@@ -59,16 +59,6 @@ QUESTIONARI = {
         ],
     
         'campi_preliminari': [
-            {'name': 'nome', 'label': 'Nome', 'type': 'text'},
-            {'name': 'cognome', 'label': 'Cognome', 'type': 'text'},
-            {'name': 'via', 'label': 'Via', 'type': 'text'},
-            {'name': 'cap', 'label': 'CAP', 'type': 'text'},
-            {'name': 'citta', 'label': 'Città', 'type': 'text'},
-            {'name': 'provincia', 'label': 'Provincia', 'type': 'text'},
-            {'name': 'telefono_raads', 'label': 'Numero di telefono', 'type': 'text'},
-            {'name': 'email_raads', 'label': 'E-mail', 'type': 'email'},
-            {'name': 'data_oggi', 'label': 'Data di oggi', 'type': 'date'},
-            {'name': 'eta_raads', 'label': 'Età (in anni)', 'type': 'number'},
     
             {
                 'name': 'sesso_raads',
