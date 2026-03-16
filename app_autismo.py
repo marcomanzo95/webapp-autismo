@@ -59,13 +59,6 @@ QUESTIONARI = {
         ],
     
         'campi_preliminari': [
-    
-            {
-                'name': 'sesso_raads',
-                'label': 'Sesso',
-                'type': 'radio',
-                'options': ['Maschio', 'Femmina']
-            },
             {
                 'name': 'stato_civile_raads',
                 'label': 'Stato civile',
