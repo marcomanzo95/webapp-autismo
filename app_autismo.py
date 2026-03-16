@@ -675,6 +675,20 @@ def invia_risultati():
         genere = request.form.get('genere')
         istruzione = request.form.get('istruzione')
         
+        # Campi preliminari RAADS-R (se presenti)
+        sostegno_scuola = request.form.get('sostegno_scuola', 'Non specificato')
+        misure_compensative = request.form.get('misure_compensative', 'Non specificato')
+        stato_civile = request.form.get('stato_civile_raads', 'Non specificato')
+        hai_figli = request.form.get('hai_figli', 'Non specificato')
+        figli_specifica = request.form.get('figli_specifica', '')
+        patente_guida = request.form.get('patente_guida', 'Non specificato')
+        diagnosi_pregressa = request.form.get('diagnosi_pregressa_presenza', 'Non specificato')
+        diagnosi_specifica = request.form.get('diagnosi_pregressa', '')
+        chi_ha_fatto_diagnosi = request.form.get('chi_ha_fatto_diagnosi', '')
+        data_diagnosi = request.form.get('data_diagnosi', '')
+        prima_parola = request.form.get('prima_parola', 'Non specificato')
+        prima_frase = request.form.get('prima_frase', 'Non specificato')
+        
         # Estrai le risposte dal form
         risposte = {}
         for key in request.form:
@@ -692,6 +706,8 @@ def invia_risultati():
             risultato = calcola_isi(risposte_lista)
         elif test_name == 'asi':
             risultato = calcola_asi(risposte_lista)
+        elif test_name == 'raads_r':
+            risultato = calcola_raads_r(risposte_lista)
         elif test_name == 'aq':
             risultato = calcola_aq(risposte_lista)
         elif test_name == 'eq':
@@ -704,61 +720,69 @@ def invia_risultati():
             risultato = calcola_stai_y2(risposte_lista)
         elif test_name == 'ocir':
             risultato = calcola_ocir(risposte_lista)
-        elif test_name == 'asq':
-            risultato = calcola_asq(risposte_lista, genere=genere)
-        elif test_name == 'raads_r':
-            risultato = calcola_raads_r(risposte_lista)
+        elif test_name == 'bis11':
+            risultato = calcola_bis11(risposte_lista)
         else:
             return jsonify({'success': False, 'message': 'Test non riconosciuto'})
         
-        # Prepara il messaggio email in HTML
+        if not risultato:
+            return jsonify({'success': False, 'message': 'Errore nel calcolo del punteggio'})
+        
+        # Costruisci l'email
+        email_subject = f'Risultati Test {test_name.upper()} - Codice Paziente: {codice_paziente}'
+        
         email_body = f"""
         <html>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-            <h1>Risultati Test {QUESTIONARI[test_name]['nome']}</h1>
-            <hr>
-            
-            <h2>Dati Paziente</h2>
-            <p><strong>Codice Paziente:</strong> {codice_paziente}</p>
-            <p><strong>Genere:</strong> {genere}</p>
-            <p><strong>Istruzione:</strong> {istruzione}</p>
-            <p><strong>Telefono:</strong> {telefono}</p>
-            <p><strong>Indirizzo:</strong> {indirizzo}</p>
-            <p><strong>Data:</strong> {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}</p>
-            
-            <h2>Risultati</h2>
-            <p><strong>Punteggio:</strong> {risultato['punteggio']}/{risultato['max_punteggio']}</p>
-            <p><strong>Percentuale:</strong> {risultato['percentuale']}%</p>
+        <h2>Risultati Test {test_name.upper()}</h2>
+        
+        <h3>--- DATI PAZIENTE ---</h3>
+        <p><strong>Codice Paziente:</strong> {codice_paziente}</p>
+        <p><strong>Genere:</strong> {genere}</p>
+        <p><strong>Istruzione:</strong> {istruzione}</p>
+        <p><strong>Telefono:</strong> {telefono if telefono else 'Non specificato'}</p>
+        <p><strong>Indirizzo:</strong> {indirizzo if indirizzo else 'Non specificato'}</p>
+        
+        <h3>--- DATI SCOLASTICI ---</h3>
+        <p><strong>A scuola avevi il sostegno?</strong> {sostegno_scuola}</p>
+        <p><strong>A scuola avevi misure compensative o dispensative?</strong> {misure_compensative}</p>
+        
+        <h3>--- DATI ANAMNESTICI (RAADS-R) ---</h3>
+        <p><strong>Stato civile:</strong> {stato_civile}</p>
+        <p><strong>Hai figli?</strong> {hai_figli}</p>
+        {f'<p><strong>Specifica figli:</strong> {figli_specifica}</p>' if figli_specifica else ''}
+        <p><strong>Patente di guida:</strong> {patente_guida}</p>
+        <p><strong>Diagnosi pregressa:</strong> {diagnosi_pregressa}</p>
+        {f'<p><strong>Diagnosi specifica:</strong> {diagnosi_specifica}</p>' if diagnosi_specifica else ''}
+        {f'<p><strong>Chi ha fatto la diagnosi:</strong> {chi_ha_fatto_diagnosi}</p>' if chi_ha_fatto_diagnosi else ''}
+        {f'<p><strong>Data della diagnosi:</strong> {data_diagnosi}</p>' if data_diagnosi else ''}
+        <p><strong>Prima parola:</strong> {prima_parola}</p>
+        <p><strong>Prima frase:</strong> {prima_frase}</p>
+        
+        <h3>--- RISULTATI TEST ---</h3>
+        <p><strong>Punteggio:</strong> {risultato.get('punteggio', risultato.get('punteggio_totale', 'N/A'))}/{risultato.get('max_punteggio', 'N/A')}</p>
+        <p><strong>Percentuale:</strong> {risultato.get('percentuale', 'N/A')}%</p>
         """
         
-        # Aggiungi l'interpretazione in base al test
-        if test_name == 'gsrs':
-             risultato = calcola_gsrs(risposte_lista)
-        elif test_name == 'isi':
-            risultato = calcola_isi(risposte_lista)
-        elif test_name == 'asi':
-            risultato = calcola_asi(risposte_lista)
-        elif test_name == 'tas20':
-            risultato = calcola_tas20(risposte_lista)
-        else:
-            return jsonify({'success': False, 'message': 'Test non riconosciuto'})
+        # Aggiungi interpretazione in base al test
+        if 'severita' in risultato:
+            email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>"
+        if 'interpretazione' in risultato:
+            email_body += f"<p><strong>Interpretazione:</strong> {risultato['interpretazione']}</p>"
+        if 'livello' in risultato:
+            email_body += f"<p><strong>Livello:</strong> {risultato['livello']}</p>"
         
-        email_body += f"""
-            <h2>Risposte Dettagliate</h2>
-            <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-                <tr style="background-color: #f2f2f2;">
-                    <th>Domanda</th>
-                    <th>Risposta</th>
-                </tr>
-        """
-        
-        for i, risposta in enumerate(risposte_lista, 1):
-            email_body += f"<tr><td>Domanda {i}</td><td>{risposta}</td></tr>\n"
+        # Aggiungi sottoscale se presenti
+        if 'interazione_sociale' in risultato:
+            email_body += f"""
+            <h4>Sottoscale RAADS-R:</h4>
+            <p><strong>Interazione Sociale:</strong> {risultato['interazione_sociale']}</p>
+            <p><strong>Interessi Circoscritti:</strong> {risultato['interessi_circoscritti']}</p>
+            <p><strong>Pragmatica:</strong> {risultato['pragmatica']}</p>
+            <p><strong>Senso Motorio:</strong> {risultato['senso_motorio']}</p>
+            """
         
         email_body += """
-            </table>
-            <hr>
-            <p style="font-size: 12px; color: #999;">Email inviata automaticamente dal sistema di valutazione ADHD/Autismo</p>
         </body>
         </html>
         """
@@ -770,7 +794,7 @@ def invia_risultati():
             
             # Crea il messaggio
             msg = MIMEMultipart('alternative')
-            msg['Subject'] = f'Risultati Test {test_name.upper()} - Codice Paziente: {codice_paziente}'
+            msg['Subject'] = email_subject
             msg['From'] = mittente
             msg['To'] = destinatario
             msg.attach(MIMEText(email_body, 'html'))
@@ -788,77 +812,12 @@ def invia_risultati():
         return jsonify({
             'success': True,
             'codice_paziente': codice_paziente,
-            'punteggio': risultato['punteggio'],
-            'max_punteggio': risultato['max_punteggio']
+            'punteggio': risultato.get('punteggio', risultato.get('punteggio_totale', 'N/A')),
+            'max_punteggio': risultato.get('max_punteggio', 'N/A')
         })
     
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
-
-
-def genera_email_risultati(codice, genere, istruzione, telefono, indirizzo, risultati):
-    html = f"""
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <h1>Valutazione ADHD/Autismo</h1>
-        <hr>
-        
-        <h2>Dati Paziente</h2>
-        <p><strong>Codice Paziente:</strong> {codice}</p>
-        <p><strong>Genere:</strong> {genere}</p>
-        <p><strong>Istruzione:</strong> {istruzione}</p>
-        <p><strong>Telefono:</strong> {telefono}</p>
-        <p><strong>Indirizzo:</strong> {indirizzo}</p>
-        
-        <h2>Risultati Test</h2>
-    """
-    
-    if risultati:
-        for test_name, risultato in risultati.items():
-            html += f"<h3>{test_name.upper()}</h3>"
-            html += f"<p><strong>Punteggio:</strong> {risultato.get('punteggio_totale', 'N/A')}</p>"
-            html += f"<p><strong>Interpretazione:</strong> {risultato.get('interpretazione', 'N/A')}</p>"
-            if 'sottoscale' in risultato:
-                html += "<p><strong>Sottoscale:</strong></p><ul>"
-                for subscale, valore in risultato['sottoscale'].items():
-                    html += f"<li>{subscale}: {valore}</li>"
-                html += "</ul>"
-    else:
-        html += "<p>Nessun risultato disponibile</p>"
-    
-    html += """
-        <hr>
-        <p style="color: #666; font-size: 12px;">Questo è un messaggio automatico. Non rispondere a questa email.</p>
-    </body>
-    </html>
-    """
-    return html
-
-
-def invia_email(mittente, destinatario, corpo_html, codice_paziente):
-    try:
-        import smtplib
-        from email.mime.text import MIMEText
-        from email.mime.multipart import MIMEMultipart
-        
-        # Crea il messaggio
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = f'Risultati - {codice_paziente}'
-        msg['From'] = mittente
-        msg['To'] = destinatario
-        msg.attach(MIMEText(corpo_html, 'html'))
-        
-        # Usa Gmail SMTP
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login(mittente, PASSWORD_APP)
-        server.sendmail(mittente, destinatario, msg.as_string())
-        server.quit()
-    except Exception as e:
-        raise Exception(f"Errore email: {str(e)}")
-
-
-
-
 
 
 if __name__ == '__main__':
