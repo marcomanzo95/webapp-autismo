@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from calcolatore_test_autismo import (
     calcola_raads_r, calcola_aq, calcola_eq, calcola_isi, calcola_tas20,
-    calcola_stai_y1, calcola_stai_y2, calcola_gsrs, calcola_asi, calcola_ocir, calcola_asq
+    calcola_stai_y1, calcola_stai_y2, calcola_gsrs, calcola_asi, calcola_ocir, calcola_asq,
+    calcola_abas
 )
 import smtplib
 from email.mime.text import MIMEText
@@ -644,6 +645,29 @@ QUESTIONARI = {
             "Gli altri spesso mancano alle mie aspettative"
         ]
     },
+    'abas': {
+        'nome': 'ABAS-II',
+        'descrizione': 'Adaptive Behavior Assessment System – Second Edition',
+        'istruzioni': (
+            'Inserire i punteggi grezzi di ciascuna sottoscala. '
+            'Selezionare la scheda appropriata (adulto_auto, adulto_etero, insegnante, genitore) '
+            'e indicare l\'età del soggetto in anni.'
+        ),
+        'tipo': 'abas',
+        'schede': ['adulto_auto', 'adulto_etero', 'insegnante', 'genitore'],
+        'subscale': [
+            {'name': 'Co',  'label': 'Comunicazione (Co)'},
+            {'name': 'Am',  'label': 'Uso dell\'ambiente (Am)'},
+            {'name': 'Sco', 'label': 'Competenze scolastiche / Vita a scuola (Sco/VS)'},
+            {'name': 'VC',  'label': 'Vita a casa (VC)'},
+            {'name': 'SS',  'label': 'Salute e sicurezza (SS)'},
+            {'name': 'TL',  'label': 'Gioco/Tempo libero (TL)'},
+            {'name': 'Cur', 'label': 'Cura di sé (Cur)'},
+            {'name': 'Ac',  'label': 'Autocontrollo (Ac)'},
+            {'name': 'Soc', 'label': 'Socializzazione (Soc)'},
+            {'name': 'Lav', 'label': 'Lavoro (Lav) — solo adulti, opzionale'},
+        ],
+    },
 }
 
 @app.route('/')
@@ -700,7 +724,18 @@ def invia_risultati():
         risposte_lista = [risposte.get(i, 0) for i in range(1, len(risposte) + 1)]
         
         # Calcola il punteggio in base al test
-        if test_name == 'gsrs':
+        if test_name == 'abas':
+            scheda     = request.form.get('abas_scheda', 'adulto_auto')
+            eta        = int(request.form.get('abas_eta', 0))
+            con_lavoro = request.form.get('abas_con_lavoro', 'no').lower() in ('si', 'yes', '1', 'true')
+            subscale_keys = ['Co', 'Am', 'Sco', 'VS', 'VC', 'SS', 'TL', 'Cur', 'Ac', 'Soc', 'Lav']
+            punteggi_grezzi = {}
+            for sub in subscale_keys:
+                val = request.form.get(f'abas_{sub}')
+                if val not in (None, ''):
+                    punteggi_grezzi[sub] = int(val)
+            risultato = calcola_abas(punteggi_grezzi, scheda, eta, con_lavoro)
+        elif test_name == 'gsrs':
             risultato = calcola_gsrs(risposte_lista)
         elif test_name == 'isi':
             risultato = calcola_isi(risposte_lista)
@@ -727,26 +762,26 @@ def invia_risultati():
         
         if not risultato:
             return jsonify({'success': False, 'message': 'Errore nel calcolo del punteggio'})
-        
+
         # Costruisci l'email
         email_subject = f'Risultati Test {test_name.upper()} - Codice Paziente: {codice_paziente}'
-        
+
         email_body = f"""
         <html>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
         <h2>Risultati Test {test_name.upper()}</h2>
-        
+
         <h3>--- DATI PAZIENTE ---</h3>
         <p><strong>Codice Paziente:</strong> {codice_paziente}</p>
         <p><strong>Genere:</strong> {genere}</p>
         <p><strong>Istruzione:</strong> {istruzione}</p>
         <p><strong>Telefono:</strong> {telefono if telefono else 'Non specificato'}</p>
         <p><strong>Indirizzo:</strong> {indirizzo if indirizzo else 'Non specificato'}</p>
-        
+
         <h3>--- DATI SCOLASTICI ---</h3>
         <p><strong>A scuola avevi il sostegno?</strong> {sostegno_scuola}</p>
         <p><strong>A scuola avevi misure compensative o dispensative?</strong> {misure_compensative}</p>
-        
+
         <h3>--- DATI ANAMNESTICI (RAADS-R) ---</h3>
         <p><strong>Stato civile:</strong> {stato_civile}</p>
         <p><strong>Hai figli?</strong> {hai_figli}</p>
@@ -758,30 +793,62 @@ def invia_risultati():
         {f'<p><strong>Data della diagnosi:</strong> {data_diagnosi}</p>' if data_diagnosi else ''}
         <p><strong>Prima parola:</strong> {prima_parola}</p>
         <p><strong>Prima frase:</strong> {prima_frase}</p>
-        
+
         <h3>--- RISULTATI TEST ---</h3>
-        <p><strong>Punteggio:</strong> {risultato.get('punteggio', risultato.get('punteggio_totale', 'N/A'))}/{risultato.get('max_punteggio', 'N/A')}</p>
-        <p><strong>Percentuale:</strong> {risultato.get('percentuale', 'N/A')}%</p>
         """
-        
-        # Aggiungi interpretazione in base al test
-        if 'severita' in risultato:
-            email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>"
-        if 'interpretazione' in risultato:
-            email_body += f"<p><strong>Interpretazione:</strong> {risultato['interpretazione']}</p>"
-        if 'livello' in risultato:
-            email_body += f"<p><strong>Livello:</strong> {risultato['livello']}</p>"
-        
-        # Aggiungi sottoscale se presenti
-        if 'interazione_sociale' in risultato:
+
+        if test_name == 'abas':
+            if risultato.get('errore'):
+                email_body += f"<p><strong>Errore:</strong> {risultato['errore']}</p>"
+            else:
+                pp  = risultato.get('punteggi_ponderati', {})
+                som = risultato.get('somme_domini', {})
+                cmp = risultato.get('compositi', {})
+                pct = risultato.get('percentili', {})
+
+                email_body += f"""
+                <h4>Punteggi Ponderati</h4>
+                <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;">
+                  <tr><th>Sottoscala</th><th>Punteggio Ponderato</th></tr>
+                  {''.join(f'<tr><td>{k}</td><td>{v if v is not None else "-"}</td></tr>' for k, v in pp.items())}
+                </table>
+
+                <h4>Somme dei Domini</h4>
+                <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;">
+                  <tr><th>Dominio</th><th>Somma</th></tr>
+                  {''.join(f'<tr><td>{k}</td><td>{v if v is not None else "-"}</td></tr>' for k, v in som.items())}
+                </table>
+
+                <h4>Punteggi Compositi (media=100, DS=15)</h4>
+                <table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;">
+                  <tr><th>Composito</th><th>Punteggio Standard</th><th>Percentile</th></tr>
+                  {''.join(f'<tr><td>{k}</td><td>{cmp.get(k) if cmp.get(k) is not None else "-"}</td><td>{pct.get(k) if pct.get(k) is not None else "-"}</td></tr>' for k in ['GAC','DAC','DAS','DAP'])}
+                </table>
+                """
+        else:
             email_body += f"""
-            <h4>Sottoscale RAADS-R:</h4>
-            <p><strong>Interazione Sociale:</strong> {risultato['interazione_sociale']}</p>
-            <p><strong>Interessi Circoscritti:</strong> {risultato['interessi_circoscritti']}</p>
-            <p><strong>Pragmatica:</strong> {risultato['pragmatica']}</p>
-            <p><strong>Senso Motorio:</strong> {risultato['senso_motorio']}</p>
+            <p><strong>Punteggio:</strong> {risultato.get('punteggio', risultato.get('punteggio_totale', 'N/A'))}/{risultato.get('max_punteggio', 'N/A')}</p>
+            <p><strong>Percentuale:</strong> {risultato.get('percentuale', 'N/A')}%</p>
             """
-        
+
+            # Aggiungi interpretazione in base al test
+            if 'severita' in risultato:
+                email_body += f"<p><strong>Severità:</strong> {risultato['severita']}</p>"
+            if 'interpretazione' in risultato:
+                email_body += f"<p><strong>Interpretazione:</strong> {risultato['interpretazione']}</p>"
+            if 'livello' in risultato:
+                email_body += f"<p><strong>Livello:</strong> {risultato['livello']}</p>"
+
+            # Aggiungi sottoscale se presenti
+            if 'interazione_sociale' in risultato:
+                email_body += f"""
+                <h4>Sottoscale RAADS-R:</h4>
+                <p><strong>Interazione Sociale:</strong> {risultato['interazione_sociale']}</p>
+                <p><strong>Interessi Circoscritti:</strong> {risultato['interessi_circoscritti']}</p>
+                <p><strong>Pragmatica:</strong> {risultato['pragmatica']}</p>
+                <p><strong>Senso Motorio:</strong> {risultato['senso_motorio']}</p>
+                """
+
         email_body += """
         </body>
         </html>
